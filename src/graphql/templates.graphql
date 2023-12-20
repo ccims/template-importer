@@ -1,0 +1,188 @@
+fragment BaseTemplateInfo on BaseTemplate {
+    id
+    name
+    description
+    templatedFieldSpecifications {
+        name
+        value
+    }
+}
+
+fragment RelationPartnerTemplateInfo on RelationPartnerTemplate {
+    ...BaseTemplateInfo
+    shapeRadius
+    shapeType
+    fill {
+        id
+        color
+    }
+    stroke {
+        id
+        color
+        dash
+    }
+}
+
+fragment FullIssueTemplateInfo on IssueTemplate {
+    ...BaseTemplateInfo
+    extends {
+        nodes {
+            id
+        }
+    }
+    assignmentTypes {
+        nodes {
+            id
+            name
+            description
+        }
+    }
+    issueTypes {
+        nodes {
+            id
+            name
+            description
+        }
+    }
+    issueStates {
+        nodes {
+            id
+            name
+            description
+            isOpen
+        }
+    }
+    relationTypes {
+        nodes {
+            id
+            name
+            description
+        }
+    }
+}
+
+fragment FullComponentTemplateInfo on ComponentTemplate {
+    ...RelationPartnerTemplateInfo
+    extends {
+        nodes {
+            id
+        }
+    }
+    componentVersionTemplate {
+        ...BaseTemplateInfo
+    }
+}
+
+fragment FullInterfaceSpecificationTemplateInfo on InterfaceSpecificationTemplate {
+    ...RelationPartnerTemplateInfo
+    extends {
+        nodes {
+            id
+        }
+    }
+    canBeVisibleOnComponents {
+        nodes {
+            id
+        }
+    }
+    canBeInvisibleOnComponents{
+        nodes {
+            id
+        }
+    }
+    interfaceSpecificationVersionTemplate {
+        ...BaseTemplateInfo
+    }
+    interfaceDefinitionTemplate {
+        ...BaseTemplateInfo
+    }
+    interfaceTemplate {
+        ...BaseTemplateInfo
+    }
+}
+
+fragment FullArtefactTemplateInfo on ArtefactTemplate {
+    ...BaseTemplateInfo
+    extends {
+        nodes {
+            id
+        }
+    }
+}
+
+fragment FullRelationTemplateInfo on RelationTemplate {
+    ...BaseTemplateInfo
+    extends {
+        nodes {
+            id
+        }
+    }
+    markerType
+    relationConditions {
+        nodes {
+            from {
+                nodes {
+                    id
+                }
+            }
+            to {
+                nodes {
+                    id
+                }
+            }
+            interfaceSpecificationDerivationConditions {
+                derivesInvisibleDerived
+                derivesInvisibleSelfDefined
+                derivesVisibleDerived
+                derivesVisibleSelfDefined
+                isInvisibleDerived
+                isVisibleDerived
+                derivableInterfaceSpecifications {
+                    nodes {
+                        id
+                    }
+                }
+            }
+        }
+    }
+}
+
+query getFullIssueTemplate($id: ID!) {
+    node(id: $id) {
+        ...on IssueTemplate {
+            ...FullIssueTemplateInfo
+        }
+    }
+}
+
+query getFullComponentTemplate($id: ID!) {
+    node(id: $id) {
+        ...on ComponentTemplate {
+            ...FullComponentTemplateInfo
+        }
+    }
+}
+
+query getFullInterfaceSpecificationTemplate($id: ID!) {
+    node(id: $id) {
+        ...on InterfaceSpecificationTemplate {
+            ...FullInterfaceSpecificationTemplateInfo
+        }
+    }
+}
+
+query getFullArtefactTemplate($id: ID!) {
+    node(id: $id) {
+        ...on ArtefactTemplate {
+            ...FullArtefactTemplateInfo
+        }
+    }
+}
+
+query getFullRelationTemplate($id: ID!) {
+    node(id: $id) {
+        ...on RelationTemplate {
+            ...FullRelationTemplateInfo
+        }
+    }
+}

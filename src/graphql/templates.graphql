@@ -2,7 +2,7 @@ fragment BaseTemplateInfo on BaseTemplate {
     id
     name
     description
-    templatedFieldSpecifications {
+    templateFieldSpecifications {
         name
         value
     }
@@ -131,15 +131,17 @@ fragment FullRelationTemplateInfo on RelationTemplate {
                 }
             }
             interfaceSpecificationDerivationConditions {
-                derivesInvisibleDerived
-                derivesInvisibleSelfDefined
-                derivesVisibleDerived
-                derivesVisibleSelfDefined
-                isInvisibleDerived
-                isVisibleDerived
-                derivableInterfaceSpecifications {
-                    nodes {
-                        id
+                nodes {
+                    derivesInvisibleDerived
+                    derivesInvisibleSelfDefined
+                    derivesVisibleDerived
+                    derivesVisibleSelfDefined
+                    isInvisibleDerived
+                    isVisibleDerived
+                    derivableInterfaceSpecifications {
+                        nodes {
+                            id
+                        }
                     }
                 }
             }

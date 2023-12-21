@@ -2,7 +2,7 @@ import { FullIssueTemplateInfoFragment } from "../graphql/generated";
 import { IssueTemplateDefinition } from "../model/issueTemplateDefinition";
 import { TemplateHandler } from "./templateHandler";
 
-export class IssueTemplateHanlder extends TemplateHandler<IssueTemplateDefinition, FullIssueTemplateInfoFragment> {
+export class IssueTemplateHandler extends TemplateHandler<IssueTemplateDefinition, FullIssueTemplateInfoFragment> {
     async createTemplate(definition: IssueTemplateDefinition): Promise<FullIssueTemplateInfoFragment> {
         const defaultValue = await this.getDefault(definition);
         const context = { definition, defaultValue };

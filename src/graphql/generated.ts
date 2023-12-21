@@ -7790,6 +7790,8 @@ export type InterfaceSpecificationDerivationConditionFilterInput = {
 
 /** Input to create a InterfaceSpecificationDerivationCondition */
 export type InterfaceSpecificationDerivationConditionInput = {
+    /** The ids of the InterfaceSpecifications this can derive */
+    derivableInterfaceSpecifications: Array<Scalars["ID"]["input"]>;
     /** If true, invisible derived InterfaceSpecifications are derived */
     derivesInvisibleDerived: Scalars["Boolean"]["input"];
     /** If true, invisible self-defined InterfaceSpecifications are derived */
@@ -7798,32 +7800,10 @@ export type InterfaceSpecificationDerivationConditionInput = {
     derivesVisibleDerived: Scalars["Boolean"]["input"];
     /** If true, visible self-defined InterfaceSpecifications are derived */
     derivesVisibleSelfDefined: Scalars["Boolean"]["input"];
-    /** The description of the NamedNode */
-    description: Scalars["String"]["input"];
-    /** IDs of Templates the created template extends. Must be templates of the same type. */
-    extends?: InputMaybe<Array<Scalars["ID"]["input"]>>;
-    /** The initial value of the extension fields */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
-    /** Style of the fill */
-    fill?: InputMaybe<FillStyleInput>;
     /** If true InterfaceSpecifications are invisible derived */
     isInvisibleDerived: Scalars["Boolean"]["input"];
     /** If true InterfaceSpecifications are visible derived */
     isVisibleDerived: Scalars["Boolean"]["input"];
-    /** The name of the NamedNode, must not be blank */
-    name: Scalars["String"]["input"];
-    /** The corner radius of the shape, ignored for circle/ellipse */
-    shapeRadius?: InputMaybe<Scalars["Float"]["input"]>;
-    /** The type of the shape */
-    shapeType: ShapeType;
-    /** Style of the stroke */
-    stroke?: InputMaybe<StrokeStyleInput>;
-    /**
-     * Additional initial templateFieldSpecifications, should be a JSON schema JSON.
-     *         Must be disjoint with templateFieldSpecifications of templates this template extends.
-     *
-     */
-    templateFieldSpecifications?: InputMaybe<Array<JsonFieldInput>>;
 };
 
 /** Used to filter by a connection-based property. Fields are joined by AND */

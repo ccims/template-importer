@@ -1,3 +1,7 @@
+import { ArtefactTemplateHandler } from "./engines/assignmentTemplateHandler";
+import { InterfaceSpecificationTemplateHandler } from "./engines/interfaceSpecificationTemplateHandler";
+import { IssueTemplateHandler } from "./engines/issueTemplateHandler";
+import { RelationTemplateHandler } from "./engines/relationTemplateHandler";
 import { TemplateHandler } from "./engines/templateHandler";
 import { Client } from "./graphql/client";
 import { TemplateDefinition } from "./model/templateDefinition";
@@ -5,7 +9,13 @@ import { TemplateReference } from "./model/templateReference";
 import { TemplateType } from "./model/templateType";
 
 export class TemplateEngine {
-    private readonly handlers: Map<string, TemplateHandler<any, any>> = new Map();
+    private readonly handlers = new Map<TemplateType, TemplateHandler<any, any>>([
+        [TemplateType.ISSUE_TEMPLATE, new IssueTemplateHandler(this)],
+        [TemplateType.RELATION_TEMPLATE, new RelationTemplateHandler(this)],
+        [TemplateType.INTERFACE_SPECIFICATION_TEMPLATE, new InterfaceSpecificationTemplateHandler(this)],
+        [TemplateType.RELATION_TEMPLATE, new RelationTemplateHandler(this)],
+        [TemplateType.ARTEFACT_TEMPLATE, new ArtefactTemplateHandler(this)]
+    ]);
 
     private readonly refDependencyQueue: Map<string, TemplateDefinition[]> = new Map();
 

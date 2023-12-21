@@ -99,6 +99,9 @@ fragment FullInterfaceSpecificationTemplateInfo on InterfaceSpecificationTemplat
     interfaceTemplate {
         ...BaseTemplateInfo
     }
+    interfacePartTemplate {
+        ...BaseTemplateInfo
+    }
 }
 
 fragment FullArtefactTemplateInfo on ArtefactTemplate {

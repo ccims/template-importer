@@ -30,7 +30,7 @@ export class TemplateEngine {
         this.definitionStack.push(...definitions);
     }
 
-    private async process(): Promise<void> {
+    async process(): Promise<void> {
         while (this.definitionStack.length > 0) {
             const definition = this.definitionStack.pop()!;
             const handler = this.getHandler(definition.type);

@@ -20,6 +20,10 @@ try {
     const jsonData = readFileSyncAsJSON(filePath);
     const client = useClient(authToken);
     const templateEngine = new TemplateEngine(client, jsonData);
+    templateEngine.process().catch((e) => {
+        console.error("Error processing templates:", e);
+        process.exit(1);
+    });
 } catch (error) {
     console.error("Error reading file:", error);
     process.exit(1);

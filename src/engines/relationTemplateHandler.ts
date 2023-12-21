@@ -7,9 +7,7 @@ export class RelationTemplateHandler extends TemplateHandler<
     RelationTemplateDefinition,
     FullRelationTemplateInfoFragment
 > {
-    async getRelationConditions(
-        definition: RelationTemplateDefinition
-    ): Promise<RelationConditionInput[]> {
+    async getRelationConditions(definition: RelationTemplateDefinition): Promise<RelationConditionInput[]> {
         const res: RelationConditionInput[] = [];
         if (definition.relationConditions != undefined) {
             for (const condition of definition.relationConditions) {

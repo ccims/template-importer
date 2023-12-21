@@ -1,4 +1,11 @@
-import { BaseTemplateInfoFragment, FillStyle, FillStyleInput, StrokeStyle, StrokeStyleInput, SubTemplateInput } from "../graphql/generated";
+import {
+    BaseTemplateInfoFragment,
+    FillStyle,
+    FillStyleInput,
+    StrokeStyle,
+    StrokeStyleInput,
+    SubTemplateInput
+} from "../graphql/generated";
 import { TemplateDefinition } from "../model/templateDefinition";
 import { TemplateReference } from "../model/templateReference";
 import { TemplatedFieldSpecification } from "../model/templatedFieldSpecification";
@@ -64,33 +71,33 @@ export abstract class TemplateHandler<
         return {
             name: template.name,
             description: template.description,
-            templateFieldSpecifications: template.templateFieldSpecifications.map(spec => {
+            templateFieldSpecifications: template.templateFieldSpecifications.map((spec) => {
                 return {
                     name: spec.name,
                     value: spec.value
-                }
+                };
             })
         };
     }
 
-    mapFill(fill: FillStyle | undefined): FillStyleInput |undefined {
+    mapFill(fill: FillStyle | undefined): FillStyleInput | undefined {
         if (fill == undefined) {
-            return undefined
+            return undefined;
         } else {
             return {
-                color: fill.color,
-            }
+                color: fill.color
+            };
         }
     }
 
     mapStroke(stroke: StrokeStyle | undefined): StrokeStyleInput | undefined {
         if (stroke == undefined) {
-            return undefined
+            return undefined;
         } else {
             return {
                 color: stroke.color,
-                dash: stroke.dash,
-            }
+                dash: stroke.dash
+            };
         }
     }
 

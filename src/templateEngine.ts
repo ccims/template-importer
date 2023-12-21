@@ -36,11 +36,11 @@ export class TemplateEngine {
             } catch (e) {
                 if (e instanceof UnsatisfiedDependencyError) {
                     const dependency = e.dependency;
-                if (this.refDependencyQueue.has(dependency)) {
-                    this.refDependencyQueue.get(dependency)!.push(definition);
-                } else {
-                    this.refDependencyQueue.set(dependency, [definition]);
-                }
+                    if (this.refDependencyQueue.has(dependency)) {
+                        this.refDependencyQueue.get(dependency)!.push(definition);
+                    } else {
+                        this.refDependencyQueue.set(dependency, [definition]);
+                    }
                 } else {
                     throw e;
                 }

@@ -42,6 +42,7 @@ fragment FullIssueTemplateInfo on IssueTemplate {
             id
             name
             description
+            iconPath
         }
     }
     issueStates {
@@ -50,6 +51,14 @@ fragment FullIssueTemplateInfo on IssueTemplate {
             name
             description
             isOpen
+        }
+    }
+    issuePriorities {
+        nodes {
+            id
+            name
+            description
+            value
         }
     }
     relationTypes {
@@ -121,6 +130,11 @@ fragment FullRelationTemplateInfo on RelationTemplate {
         }
     }
     markerType
+    stroke {
+        id
+        color
+        dash
+    }
     relationConditions {
         nodes {
             from {
@@ -187,6 +201,66 @@ query getFullArtefactTemplate($id: ID!) {
 query getFullRelationTemplate($id: ID!) {
     node(id: $id) {
         ...on RelationTemplate {
+            ...FullRelationTemplateInfo
+        }
+    }
+}
+
+query getFullTemplate($id: ID!) {
+    node(id: $id) {
+        ...on IssueTemplate {
+            ...FullIssueTemplateInfo
+        }
+        ...on ComponentTemplate {
+            ...FullComponentTemplateInfo
+        }
+        ...on InterfaceSpecificationTemplate {
+            ...FullInterfaceSpecificationTemplateInfo
+        }
+        ...on ArtefactTemplate {
+            ...FullArtefactTemplateInfo
+        }
+        ...on RelationTemplate {
+            ...FullRelationTemplateInfo
+        }
+    }
+}
+
+mutation createIssueTemplate($input: CreateIssueTemplateInput!) {
+    createIssueTemplate(input: $input) {
+        issueTemplate {
+            ...FullIssueTemplateInfo
+        }
+    }
+}
+
+mutation createComponentTemplate($input: CreateComponentTemplateInput!) {
+    createComponentTemplate(input: $input) {
+        componentTemplate {
+            ...FullComponentTemplateInfo
+        }
+    }
+}
+
+mutation createInterfaceSpecificationTemplate($input: CreateInterfaceSpecificationTemplateInput!) {
+    createInterfaceSpecificationTemplate(input: $input) {
+        interfaceSpecificationTemplate {
+            ...FullInterfaceSpecificationTemplateInfo
+        }
+    }
+}
+
+mutation createArtefactTemplate($input: CreateArtefactTemplateInput!) {
+    createArtefactTemplate(input: $input) {
+        artefactTemplate {
+            ...FullArtefactTemplateInfo
+        }
+    }
+}
+
+mutation createRelationTemplate($input: CreateRelationTemplateInput!) {
+    createRelationTemplate(input: $input) {
+        relationTemplate {
             ...FullRelationTemplateInfo
         }
     }

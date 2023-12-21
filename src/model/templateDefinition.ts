@@ -1,8 +1,10 @@
 import { TemplateReference } from "./templateReference";
+import { TemplateType } from "./templateType";
 import { TemplatedFieldSpecification } from "./templatedFieldSpecification";
 
 export interface TemplateDefinition {
-    type: string;
+    type: TemplateType;
+    ref?: string;
     name?: string;
     description?: string;
     templatedFieldSpecifications?: TemplatedFieldSpecification[];

@@ -6,7 +6,7 @@ import { TemplateType } from "./templateType";
 export interface InterfaceSpecificationTemplateDefinition extends RelationPartnerTemplateDefinition {
     type: TemplateType.INTERFACE_SPECIFICATION_TEMPLATE;
     canBeVisibleOnComponents?: TemplateReference[];
-    canBeInvisbleOnComponents?: TemplateReference[];
+    canBeInvisibleOnComponents?: TemplateReference[];
     interfaceSpecificationVersionTemplate?: BaseTemplateDefinition;
     interfaceDefinitionTemplate?: BaseTemplateDefinition;
     interfaceTemplate?: BaseTemplateDefinition;

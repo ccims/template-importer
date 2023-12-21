@@ -1,5 +1,7 @@
-export type TemplateReference = {
-    ref: string;
-} | {
-    id: string;
-}
+export type TemplateReference =
+    | {
+          ref: string;
+      }
+    | {
+          id: string;
+      };

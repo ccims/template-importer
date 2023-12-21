@@ -3,5 +3,5 @@ export enum TemplateType {
     ASSIGNMENT_TEMPLATE = "AssignmentTemplate",
     COMPONENT_TEMPLATE = "ComponentTemplate",
     RELATION_TEMPLATE = "RelationTemplate",
-    INTERFACE_SPECIFICATION_TEMPLATE = "InterfaceSpecificationTemplate",
+    INTERFACE_SPECIFICATION_TEMPLATE = "InterfaceSpecificationTemplate"
 }

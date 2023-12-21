@@ -15,14 +15,14 @@ export interface BaseTypeDefinition {
     description: string;
 }
 
-export interface IssueTypeDefinition extends BaseTypeDefinition { }
+export interface IssueTypeDefinition extends BaseTypeDefinition {}
 
 export interface IssueStateDefinition extends BaseTypeDefinition {
     isOpen: boolean;
 }
 
-export interface IssuePriorityDefinition extends BaseTypeDefinition { }
+export interface IssuePriorityDefinition extends BaseTypeDefinition {}
 
-export interface RelationTypeDefinition extends BaseTypeDefinition { }
+export interface RelationTypeDefinition extends BaseTypeDefinition {}
 
-export interface AssignmentTypeDefinition extends BaseTypeDefinition { }
+export interface AssignmentTypeDefinition extends BaseTypeDefinition {}

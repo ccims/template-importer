@@ -12,7 +12,7 @@ export function useClient(token: string) {
         };
     };
 
-    const client = new GraphQLClient("/api/graphql", {
+    const client = new GraphQLClient("http://localhost:8080/graphql", {
         requestMiddleware
     });
 

@@ -1,4 +1,5 @@
 import { ArtefactTemplateHandler } from "./engines/assignmentTemplateHandler";
+import { ComponentTemplateHandler } from "./engines/componentTemplateHandler";
 import { InterfaceSpecificationTemplateHandler } from "./engines/interfaceSpecificationTemplateHandler";
 import { IssueTemplateHandler } from "./engines/issueTemplateHandler";
 import { RelationTemplateHandler } from "./engines/relationTemplateHandler";
@@ -13,7 +14,7 @@ export class TemplateEngine {
         [TemplateType.ISSUE_TEMPLATE, new IssueTemplateHandler(this)],
         [TemplateType.RELATION_TEMPLATE, new RelationTemplateHandler(this)],
         [TemplateType.INTERFACE_SPECIFICATION_TEMPLATE, new InterfaceSpecificationTemplateHandler(this)],
-        [TemplateType.RELATION_TEMPLATE, new RelationTemplateHandler(this)],
+        [TemplateType.COMPONENT_TEMPLATE, new ComponentTemplateHandler(this)],
         [TemplateType.ARTEFACT_TEMPLATE, new ArtefactTemplateHandler(this)]
     ]);
 
@@ -41,6 +42,7 @@ export class TemplateEngine {
                     const dependents = this.refDependencyQueue.get(definition.ref);
                     if (dependents != undefined) {
                         this.definitionStack.push(...dependents);
+                        this.refDependencyQueue.delete(definition.ref);
                     }
                 }
             } catch (e) {

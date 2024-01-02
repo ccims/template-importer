@@ -85,7 +85,7 @@ export abstract class TemplateHandler<
             return undefined;
         } else {
             return {
-                color: fill.color
+                color: fill.color ?? undefined
             };
         }
     }
@@ -95,8 +95,8 @@ export abstract class TemplateHandler<
             return undefined;
         } else {
             return {
-                color: stroke.color,
-                dash: stroke.dash
+                color: stroke.color ?? undefined,
+                dash: stroke.dash ?? undefined
             };
         }
     }

@@ -42,6 +42,7 @@ export class IssueTemplateHandler extends TemplateHandler<IssueTemplateDefinitio
             definition.relationTypes ??
             defaultValue?.relationTypes?.nodes.map((node) => ({
                 name: node.name,
+                inverseName: node.inverseName,
                 description: node.description
             })) ??
             [];

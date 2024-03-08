@@ -27,6 +27,8 @@ export interface IssuePriorityDefinition extends BaseTypeDefinition {
     value: number;
 }
 
-export interface RelationTypeDefinition extends BaseTypeDefinition {}
+export interface RelationTypeDefinition extends BaseTypeDefinition {
+    inverseName: string;
+}
 
 export interface AssignmentTypeDefinition extends BaseTypeDefinition {}

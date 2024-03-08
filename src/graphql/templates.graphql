@@ -65,6 +65,7 @@ fragment FullIssueTemplateInfo on IssueTemplate {
         nodes {
             id
             name
+            inverseName
             description
         }
     }

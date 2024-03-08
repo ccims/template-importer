@@ -1,11 +1,4 @@
-import {
-    BaseTemplateInfoFragment,
-    FillStyle,
-    FillStyleInput,
-    StrokeStyle,
-    StrokeStyleInput,
-    SubTemplateInput
-} from "../graphql/generated";
+import { BaseTemplateInfoFragment, FillStyleInput, StrokeStyleInput, SubTemplateInput } from "../graphql/generated";
 import { TemplateDefinition } from "../model/templateDefinition";
 import { TemplateReference } from "../model/templateReference";
 import { TemplatedFieldSpecification } from "../model/templatedFieldSpecification";
@@ -114,4 +107,15 @@ export interface TemplateInputCommonFields {
     description: string;
     extends: string[];
     templateFieldSpecifications: TemplatedFieldSpecification[];
+}
+
+interface FillStyle {
+    id: string;
+    color: string;
+}
+
+interface StrokeStyle {
+    id: string;
+    color?: string | null;
+    dash?: number[] | null;
 }

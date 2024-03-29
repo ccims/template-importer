@@ -1,7 +1,7 @@
 import { GraphQLClient, RequestMiddleware } from "graphql-request";
 import { getSdk } from "./generated";
 
-export function useClient(token: string) {
+export function useClient(token: string, url: string) {
     const requestMiddleware: RequestMiddleware = async (request) => {
         return {
             ...request,
@@ -12,7 +12,7 @@ export function useClient(token: string) {
         };
     };
 
-    const client = new GraphQLClient("http://localhost:8080/graphql", {
+    const client = new GraphQLClient(url, {
         requestMiddleware
     });
 

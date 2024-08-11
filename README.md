@@ -6,5 +6,5 @@ Utility tool for importing Component/InterfaceSpecification/Relation/Issue Templ
 ```sh
 npm i
 npm run build
-npm start <file_path> <auth_token> [api_endpoint]
+npm start <file_path> <client_id> <client_secret> [gropius_endpoint]
 ```

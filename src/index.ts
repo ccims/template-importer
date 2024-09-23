@@ -8,7 +8,7 @@ function readFileSyncAsJSON(filePath: string): any {
     return jsonData;
 }
 
-if (process.argv.length !== 4 && process.argv.length !== 5) {
+if (process.argv.length !== 5 && process.argv.length !== 6) {
     console.error("Usage: node script.ts <file_path> <client_id> <client_secret> [gropius_endpoint]");
     process.exit(1);
 }

@@ -8,7 +8,5 @@ export interface InterfaceSpecificationTemplateDefinition extends RelationPartne
     canBeVisibleOnComponents?: TemplateReference[];
     canBeInvisibleOnComponents?: TemplateReference[];
     interfaceSpecificationVersionTemplate?: BaseTemplateDefinition;
-    interfaceDefinitionTemplate?: BaseTemplateDefinition;
-    interfaceTemplate?: BaseTemplateDefinition;
     interfacePartTemplate?: BaseTemplateDefinition;
 }

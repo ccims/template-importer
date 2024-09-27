@@ -30,14 +30,9 @@ export class InterfaceSpecificationTemplateHandler extends RelationPartnerTempla
                 interfaceSpecificationVersionTemplate:
                     definition.interfaceSpecificationVersionTemplate ??
                     this.extractSubTemplateInput(defaultValue?.interfaceSpecificationVersionTemplate),
-                interfaceDefinitionTemplate:
-                    definition.interfaceDefinitionTemplate ??
-                    this.extractSubTemplateInput(defaultValue?.interfaceDefinitionTemplate),
                 interfacePartTemplate:
                     definition.interfacePartTemplate ??
                     this.extractSubTemplateInput(defaultValue?.interfacePartTemplate),
-                interfaceTemplate:
-                    definition.interfaceTemplate ?? this.extractSubTemplateInput(defaultValue?.interfaceTemplate),
                 canBeVisibleOnComponents,
                 canBeInvisibleOnComponents
             }

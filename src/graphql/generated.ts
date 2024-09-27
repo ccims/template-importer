@@ -95,12 +95,8 @@ export type AffectedByIssueFilterInput = {
     affectingIssues?: InputMaybe<IssueListFilterInput>;
     /** Connects all subformulas via and */
     and?: InputMaybe<Array<AffectedByIssueFilterInput>>;
-    /** Filter by description */
-    description?: InputMaybe<StringFilterInput>;
     /** Filter by id */
     id?: InputMaybe<IdFilterInput>;
-    /** Filter by name */
-    name?: InputMaybe<StringFilterInput>;
     /** Negates the subformula */
     not?: InputMaybe<AffectedByIssueFilterInput>;
     /** Connects all subformulas via or */
@@ -130,9 +126,7 @@ export type AffectedByIssueOrder = {
 /** Fields a list of AffectedByIssue can be sorted by */
 export enum AffectedByIssueOrderField {
     /** Order by id */
-    Id = "ID",
-    /** Order by name */
-    Name = "NAME"
+    Id = "ID"
 }
 
 /** Filter used to filter AggregatedIssue */
@@ -292,6 +286,8 @@ export enum AllPermissionEntry {
      * Also allows to delete a Label, but only if it is allowed on all Trackable the Label is on.
      */
     ManageLabels = "MANAGE_LABELS",
+    /** Allows to manage the views of this Project. */
+    ManageViews = "MANAGE_VIEWS",
     /**
      * Allows to moderate Issues on this Trackable.
      * This allows everything `MANAGE_ISSUES` allows.
@@ -447,6 +443,8 @@ export type AssignmentFilterInput = {
     /** Filter by id */
     id?: InputMaybe<IdFilterInput>;
     /** Filters for nodes where the related node match this filter */
+    initialType?: InputMaybe<AssignmentTypeFilterInput>;
+    /** Filters for nodes where the related node match this filter */
     issue?: InputMaybe<IssueFilterInput>;
     /** Filter by lastModifiedAt */
     lastModifiedAt?: InputMaybe<DateTimeFilterInput>;
@@ -518,8 +516,6 @@ export type AssignmentTypeFilterInput = {
 export type AssignmentTypeInput = {
     /** The description of the NamedNode */
     description: Scalars["String"]["input"];
-    /** The initial value of the extension fields */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
     /** The name of the NamedNode, must not be blank */
     name: Scalars["String"]["input"];
 };
@@ -686,28 +682,24 @@ export type BooleanFilterInput = {
     in?: InputMaybe<Array<Scalars["Boolean"]["input"]>>;
 };
 
+/** Input for the bulkCreateComponent mutation */
+export type BulkCreateComponentInput = {
+    /** The input for the createComponent mutation */
+    components: Array<CreateComponentInput>;
+};
+
+/** Input to create multiple Components */
+export type BulkCreateRelationInput = {
+    /** The input for the createRelation mutation */
+    relations: Array<CreateRelationInput>;
+};
+
 /** Input for the changeAssignmentType mutation */
 export type ChangeAssignmentTypeInput = {
     /** The id of the Assignment of which the type is updated */
     assignment: Scalars["ID"]["input"];
     /** The id of the new type, must be defined by the template of the Issue */
     type?: InputMaybe<Scalars["ID"]["input"]>;
-};
-
-/** Input for the changeIssueDueDate mutation */
-export type ChangeIssueDueDateInput = {
-    /** The new dueDate */
-    dueDate?: InputMaybe<Scalars["DateTime"]["input"]>;
-    /** The id of the Issue of which the dueDate is updated */
-    issue: Scalars["ID"]["input"];
-};
-
-/** Input for the changeIssueEstimatedTime mutation */
-export type ChangeIssueEstimatedTimeInput = {
-    /** The new estimatedTime */
-    estimatedTime?: InputMaybe<Scalars["Duration"]["input"]>;
-    /** The id of the Issue of which the estimatedTime is updated */
-    issue: Scalars["ID"]["input"];
 };
 
 /** Input for the changeIssuePriority mutation */
@@ -724,22 +716,6 @@ export type ChangeIssueRelationTypeInput = {
     issueRelation: Scalars["ID"]["input"];
     /** The id of the new type, must be defined by the template of the Issue */
     type?: InputMaybe<Scalars["ID"]["input"]>;
-};
-
-/** Input for the changeIssueSpentTime mutation */
-export type ChangeIssueSpentTimeInput = {
-    /** The id of the Issue of which the spentTime is updated */
-    issue: Scalars["ID"]["input"];
-    /** The new spentTime */
-    spentTime?: InputMaybe<Scalars["Duration"]["input"]>;
-};
-
-/** Input for the changeIssueStartDate mutation */
-export type ChangeIssueStartDateInput = {
-    /** The id of the Issue of which the startDate is updated */
-    issue: Scalars["ID"]["input"];
-    /** The new startDate */
-    startDate?: InputMaybe<Scalars["DateTime"]["input"]>;
 };
 
 /** Input for the changeIssueState mutation */
@@ -893,7 +869,11 @@ export enum ComponentOrderField {
     /** Order by id */
     Id = "ID",
     /** Order by name */
-    Name = "NAME"
+    Name = "NAME",
+    /** Order by template_id */
+    TemplateId = "TEMPLATE_ID",
+    /** Order by template_name */
+    TemplateName = "TEMPLATE_NAME"
 }
 
 /** ComponentPermission entry enum type. */
@@ -1091,8 +1071,6 @@ export type ComponentVersionFilterInput = {
     and?: InputMaybe<Array<ComponentVersionFilterInput>>;
     /** Filters for nodes where the related node match this filter */
     component?: InputMaybe<ComponentFilterInput>;
-    /** Filter by description */
-    description?: InputMaybe<StringFilterInput>;
     /** Filter by id */
     id?: InputMaybe<IdFilterInput>;
     /** Filter by includingProjects */
@@ -1103,8 +1081,6 @@ export type ComponentVersionFilterInput = {
     interfaceDefinitions?: InputMaybe<InterfaceDefinitionListFilterInput>;
     /** Filter by intraComponentDependencySpecifications */
     intraComponentDependencySpecifications?: InputMaybe<IntraComponentDependencySpecificationListFilterInput>;
-    /** Filter by name */
-    name?: InputMaybe<StringFilterInput>;
     /** Negates the subformula */
     not?: InputMaybe<ComponentVersionFilterInput>;
     /** Connects all subformulas via or */
@@ -1125,12 +1101,8 @@ export type ComponentVersionFilterInput = {
 
 /** Input to create a ComponentVersion */
 export type ComponentVersionInput = {
-    /** The description of the NamedNode */
-    description: Scalars["String"]["input"];
-    /** The initial value of the extension fields */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
-    /** The name of the NamedNode, must not be blank */
-    name: Scalars["String"]["input"];
+    /** The tags of the created ComponentVersion */
+    tags: Array<Scalars["String"]["input"]>;
     /** Initial values for all templatedFields */
     templatedFields: Array<JsonFieldInput>;
     /** The version of the created ComponentVersion */
@@ -1159,8 +1131,10 @@ export type ComponentVersionOrder = {
 export enum ComponentVersionOrderField {
     /** Order by id */
     Id = "ID",
-    /** Order by name */
-    Name = "NAME",
+    /** Order by template_id */
+    TemplateId = "TEMPLATE_ID",
+    /** Order by template_name */
+    TemplateName = "TEMPLATE_NAME",
     /** Order by version */
     Version = "VERSION"
 }
@@ -1183,8 +1157,6 @@ export type ComponentVersionTemplateFilterInput = {
 
 /** Input for the createArtefact mutation */
 export type CreateArtefactInput = {
-    /** The initial value of the extension fields */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
     /** The initial file of the Artefact */
     file: Scalars["URL"]["input"];
     /** The initial value of the from field of the Artefact */
@@ -1207,8 +1179,6 @@ export type CreateArtefactTemplateInput = {
     description: Scalars["String"]["input"];
     /** IDs of Templates the created template extends. Must be templates of the same type. */
     extends?: InputMaybe<Array<Scalars["ID"]["input"]>>;
-    /** The initial value of the extension fields */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
     /** The name of the NamedNode, must not be blank */
     name: Scalars["String"]["input"];
     /**
@@ -1223,8 +1193,6 @@ export type CreateArtefactTemplateInput = {
 export type CreateAssignmentInput = {
     /** The optional type of the Assignment, must be defined by the Template of the Issue */
     assignmentType?: InputMaybe<Scalars["ID"]["input"]>;
-    /** The initial value of the extension fields */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
     /** The id of the Issue to which the User should be assigned */
     issue: Scalars["ID"]["input"];
     /** The id of the User to assign to the Issue */
@@ -1235,8 +1203,6 @@ export type CreateAssignmentInput = {
 export type CreateComponentInput = {
     /** The description of the NamedNode */
     description: Scalars["String"]["input"];
-    /** The initial value of the extension fields */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
     /** Initial InterfaceSpecifications */
     interfaceSpecifications?: InputMaybe<Array<InterfaceSpecificationInput>>;
     /** The name of the NamedNode, must not be blank */
@@ -1275,8 +1241,6 @@ export type CreateComponentTemplateInput = {
     description: Scalars["String"]["input"];
     /** IDs of Templates the created template extends. Must be templates of the same type. */
     extends?: InputMaybe<Array<Scalars["ID"]["input"]>>;
-    /** The initial value of the extension fields */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
     /** Style of the fill */
     fill?: InputMaybe<FillStyleInput>;
     /** The name of the NamedNode, must not be blank */
@@ -1299,12 +1263,8 @@ export type CreateComponentTemplateInput = {
 export type CreateComponentVersionInput = {
     /** The id of the Component the created ComponentVersion is part of */
     component: Scalars["ID"]["input"];
-    /** The description of the NamedNode */
-    description: Scalars["String"]["input"];
-    /** The initial value of the extension fields */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
-    /** The name of the NamedNode, must not be blank */
-    name: Scalars["String"]["input"];
+    /** The tags of the created ComponentVersion */
+    tags: Array<Scalars["String"]["input"]>;
     /** Initial values for all templatedFields */
     templatedFields: Array<JsonFieldInput>;
     /** The version of the created ComponentVersion */
@@ -1329,8 +1289,6 @@ export type CreateGlobalPermissionInput = {
 export type CreateImsInput = {
     /** The description of the NamedNode */
     description: Scalars["String"]["input"];
-    /** The initial value of the extension fields */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
     /** The name of the NamedNode, must not be blank */
     name: Scalars["String"]["input"];
     /** The template of the created IMS */
@@ -1357,10 +1315,12 @@ export type CreateImsPermissionInput = {
 
 /** Input for the createIMSProject mutation */
 export type CreateImsProjectInput = {
-    /** The initial value of the extension fields */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
+    /** The description of the NamedNode */
+    description: Scalars["String"]["input"];
     /** The id of the IMS the created project is part of */
     ims: Scalars["ID"]["input"];
+    /** The name of the NamedNode, must not be blank */
+    name: Scalars["String"]["input"];
     /** Initial values for all templatedFields */
     templatedFields: Array<JsonFieldInput>;
     /** The id of the Trackable which is synced */
@@ -1371,8 +1331,6 @@ export type CreateImsProjectInput = {
 export type CreateInterfacePartInput = {
     /** The description of the NamedNode */
     description: Scalars["String"]["input"];
-    /** The initial value of the extension fields */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
     /** The id of the InterfaceSpecificationVersion the created InterfacePart is part of */
     interfaceSpecificationVersion: Scalars["ID"]["input"];
     /** The name of the NamedNode, must not be blank */
@@ -1387,8 +1345,6 @@ export type CreateInterfaceSpecificationInput = {
     component: Scalars["ID"]["input"];
     /** The description of the NamedNode */
     description: Scalars["String"]["input"];
-    /** The initial value of the extension fields */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
     /** The name of the NamedNode, must not be blank */
     name: Scalars["String"]["input"];
     /** The template of the created InterfaceSpecification */
@@ -1409,18 +1365,12 @@ export type CreateInterfaceSpecificationTemplateInput = {
     description: Scalars["String"]["input"];
     /** IDs of Templates the created template extends. Must be templates of the same type. */
     extends?: InputMaybe<Array<Scalars["ID"]["input"]>>;
-    /** The initial value of the extension fields */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
     /** Style of the fill */
     fill?: InputMaybe<FillStyleInput>;
-    /** SubTemplate for all InterfacesDefinitions of a InterfaceSpecification with the created Template */
-    interfaceDefinitionTemplate: NullableSubTemplateInput;
     /** SubTemplate for all InterfaceParts of a InterfaceSpecification with the created Template */
     interfacePartTemplate: SubTemplateInput;
     /** SubTemplate for all InterfaceSpecificationVersions of a InterfaceSpecification with the created Template */
     interfaceSpecificationVersionTemplate: SubTemplateInput;
-    /** SubTemplate for all Interfaces of a InterfaceSpecification with the created Template */
-    interfaceTemplate: NullableSubTemplateInput;
     /** The name of the NamedNode, must not be blank */
     name: Scalars["String"]["input"];
     /** The corner radius of the shape, ignored for circle/ellipse */
@@ -1439,16 +1389,12 @@ export type CreateInterfaceSpecificationTemplateInput = {
 
 /** Input for the createInterfaceSpecificationVersion mutation */
 export type CreateInterfaceSpecificationVersionInput = {
-    /** The description of the NamedNode */
-    description: Scalars["String"]["input"];
-    /** The initial value of the extension fields */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
     /** The id of the InterfaceSpecification the created InterfaceSpecificationVersion is part of */
     interfaceSpecification: Scalars["ID"]["input"];
-    /** The name of the NamedNode, must not be blank */
-    name: Scalars["String"]["input"];
     /** Initial InterfaceParts */
     parts?: InputMaybe<Array<InterfacePartInput>>;
+    /** The tags of the created InterfaceSpecificationVersion */
+    tags: Array<Scalars["String"]["input"]>;
     /** Initial values for all templatedFields */
     templatedFields: Array<JsonFieldInput>;
     /** The version of the created InterfaceSpecificationVersion */
@@ -1461,8 +1407,6 @@ export type CreateIntraComponentDependencySpecificationInput = {
     componentVersion: Scalars["ID"]["input"];
     /** The description of the NamedNode */
     description: Scalars["String"]["input"];
-    /** The initial value of the extension fields */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
     /** Initial incomingParticipants, must not be empty */
     incomingParticipants: Array<IntraComponentDependencyParticipantInput>;
     /** The name of the NamedNode, must not be blank */
@@ -1477,8 +1421,6 @@ export type CreateIssueCommentInput = {
     answers?: InputMaybe<Scalars["ID"]["input"]>;
     /** Initial body of the IssueComment */
     body: Scalars["String"]["input"];
-    /** The initial value of the extension fields */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
     /** The id of the Issue the IssueComment is created on */
     issue: Scalars["ID"]["input"];
     /** Ids of initially referenced artefacts */
@@ -1489,8 +1431,6 @@ export type CreateIssueCommentInput = {
 export type CreateIssueInput = {
     /** The body of the created Issue */
     body: Scalars["String"]["input"];
-    /** The initial value of the extension fields */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
     /** The id of the state of the created Issue, must be compatible with template  */
     state: Scalars["ID"]["input"];
     /** The template of the created Issue */
@@ -1507,8 +1447,6 @@ export type CreateIssueInput = {
 
 /** Input for the createIssueRelation mutation */
 export type CreateIssueRelationInput = {
-    /** The initial value of the extension fields */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
     /** The id of the Issue from which the IssueRelation starts */
     issue: Scalars["ID"]["input"];
     /** The optional type of the IssueRelation, must be defined by the Template of the Issue */
@@ -1525,8 +1463,6 @@ export type CreateIssueTemplateInput = {
     description: Scalars["String"]["input"];
     /** IDs of Templates the created template extends. Must be templates of the same type. */
     extends?: InputMaybe<Array<Scalars["ID"]["input"]>>;
-    /** The initial value of the extension fields */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
     /** Set of all priorities Issues with the created can have. */
     issuePriorities: Array<IssuePriorityInput>;
     /** Set of all states Issues with the created Template can have */
@@ -1551,8 +1487,6 @@ export type CreateLabelInput = {
     color: Scalars["String"]["input"];
     /** The description of the NamedNode */
     description: Scalars["String"]["input"];
-    /** The initial value of the extension fields */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
     /** The name of the NamedNode, must not be blank */
     name: Scalars["String"]["input"];
     /** IDs of Trackables the Label is added to, at least one required. */
@@ -1563,8 +1497,6 @@ export type CreateLabelInput = {
 export type CreateProjectInput = {
     /** The description of the NamedNode */
     description: Scalars["String"]["input"];
-    /** The initial value of the extension fields */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
     /** The name of the NamedNode, must not be blank */
     name: Scalars["String"]["input"];
     /** The repositoryURL of the named node */
@@ -1593,8 +1525,6 @@ export type CreateRelationInput = {
     end: Scalars["ID"]["input"];
     /** If `end` is an Interface, the parts of the Interface the created Relation includes */
     endParts?: InputMaybe<Array<Scalars["ID"]["input"]>>;
-    /** The initial value of the extension fields */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
     /** The start RelationPartner of the Relation */
     start: Scalars["ID"]["input"];
     /** If `start` is an Interface, the parts of the Interface the created Relation includes */
@@ -1611,8 +1541,6 @@ export type CreateRelationTemplateInput = {
     description: Scalars["String"]["input"];
     /** IDs of Templates the created template extends. Must be templates of the same type. */
     extends?: InputMaybe<Array<Scalars["ID"]["input"]>>;
-    /** The initial value of the extension fields */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
     /** The type of the marker at the end of the relation. */
     markerType: MarkerType;
     /** The name of the NamedNode, must not be blank */
@@ -1627,6 +1555,22 @@ export type CreateRelationTemplateInput = {
      *
      */
     templateFieldSpecifications?: InputMaybe<Array<JsonFieldInput>>;
+};
+
+/** Input for the createView mutation */
+export type CreateViewInput = {
+    /** The description of the NamedNode */
+    description: Scalars["String"]["input"];
+    /** The new filter of the view */
+    filterByTemplate: Array<Scalars["ID"]["input"]>;
+    /** The name of the NamedNode, must not be blank */
+    name: Scalars["String"]["input"];
+    /** The id of the project the view belongs to */
+    project: Scalars["ID"]["input"];
+    /** Defines the new layout of a set of Relations */
+    relationLayouts?: InputMaybe<Array<UpdateRelationLayoutInput>>;
+    /** Defines the new layout of a set of RelationPartners */
+    relationPartnerLayouts?: InputMaybe<Array<UpdateRelationPartnerLayoutInput>>;
 };
 
 /** Filter which can be used to filter for Nodes with a specific DateTime field */
@@ -1693,12 +1637,34 @@ export type GlobalPermissionFilterInput = {
     users?: InputMaybe<GropiusUserListFilterInput>;
 };
 
+/** Defines the order of a GlobalPermission list */
+export type GlobalPermissionOrder = {
+    /** The direction to order by, defaults to ASC */
+    direction?: InputMaybe<OrderDirection>;
+    /** The field to order by, defaults to ID */
+    field?: InputMaybe<GlobalPermissionOrderField>;
+};
+
+/** Fields a list of GlobalPermission can be sorted by */
+export enum GlobalPermissionOrderField {
+    /** Order by allUsers */
+    AllUsers = "ALL_USERS",
+    /** Order by id */
+    Id = "ID",
+    /** Order by name */
+    Name = "NAME"
+}
+
 /** Filter used to filter GropiusUser */
 export type GropiusUserFilterInput = {
     /** Connects all subformulas via and */
     and?: InputMaybe<Array<GropiusUserFilterInput>>;
     /** Filter by assignments */
     assignments?: InputMaybe<AssignmentListFilterInput>;
+    /** Filter by canSyncOthers */
+    canSyncOthers?: InputMaybe<SyncPermissionTargetListFilterInput>;
+    /** Filter by canSyncSelf */
+    canSyncSelf?: InputMaybe<SyncPermissionTargetListFilterInput>;
     /** Filter by createdNodes */
     createdNodes?: InputMaybe<AuditedNodeListFilterInput>;
     /** Filter by displayName */
@@ -1779,6 +1745,10 @@ export type ImsFilterInput = {
     permissions?: InputMaybe<ImsPermissionListFilterInput>;
     /** Filter by projects */
     projects?: InputMaybe<ImsProjectListFilterInput>;
+    /** Filter by syncOthersAllowedBy */
+    syncOthersAllowedBy?: InputMaybe<GropiusUserListFilterInput>;
+    /** Filter by syncSelfAllowedBy */
+    syncSelfAllowedBy?: InputMaybe<GropiusUserListFilterInput>;
     /** Filters for nodes where the related node match this filter */
     template?: InputMaybe<ImsTemplateFilterInput>;
     /** Filter for templated fields with matching key and values. Entries are joined by AND */
@@ -1828,7 +1798,11 @@ export type ImsIssueOrder = {
 /** Fields a list of IMSIssue can be sorted by */
 export enum ImsIssueOrderField {
     /** Order by id */
-    Id = "ID"
+    Id = "ID",
+    /** Order by template_id */
+    TemplateId = "TEMPLATE_ID",
+    /** Order by template_name */
+    TemplateName = "TEMPLATE_NAME"
 }
 
 /** Filter used to filter IMSIssueTemplate */
@@ -1870,7 +1844,11 @@ export enum ImsOrderField {
     /** Order by id */
     Id = "ID",
     /** Order by name */
-    Name = "NAME"
+    Name = "NAME",
+    /** Order by template_id */
+    TemplateId = "TEMPLATE_ID",
+    /** Order by template_name */
+    TemplateName = "TEMPLATE_NAME"
 }
 
 /** IMSPermission entry enum type. */
@@ -1940,16 +1918,24 @@ export enum ImsPermissionOrderField {
 export type ImsProjectFilterInput = {
     /** Connects all subformulas via and */
     and?: InputMaybe<Array<ImsProjectFilterInput>>;
+    /** Filter by description */
+    description?: InputMaybe<StringFilterInput>;
     /** Filter by id */
     id?: InputMaybe<IdFilterInput>;
     /** Filters for nodes where the related node match this filter */
     ims?: InputMaybe<ImsFilterInput>;
     /** Filter by imsIssues */
     imsIssues?: InputMaybe<ImsIssueListFilterInput>;
+    /** Filter by name */
+    name?: InputMaybe<StringFilterInput>;
     /** Negates the subformula */
     not?: InputMaybe<ImsProjectFilterInput>;
     /** Connects all subformulas via or */
     or?: InputMaybe<Array<ImsProjectFilterInput>>;
+    /** Filter by syncOthersAllowedBy */
+    syncOthersAllowedBy?: InputMaybe<GropiusUserListFilterInput>;
+    /** Filter by syncSelfAllowedBy */
+    syncSelfAllowedBy?: InputMaybe<GropiusUserListFilterInput>;
     /** Filters for nodes where the related node match this filter */
     template?: InputMaybe<ImsProjectTemplateFilterInput>;
     /** Filter for templated fields with matching key and values. Entries are joined by AND */
@@ -1979,7 +1965,17 @@ export type ImsProjectOrder = {
 /** Fields a list of IMSProject can be sorted by */
 export enum ImsProjectOrderField {
     /** Order by id */
-    Id = "ID"
+    Id = "ID",
+    /** Order by ims_id */
+    ImsId = "IMS_ID",
+    /** Order by ims_name */
+    ImsName = "IMS_NAME",
+    /** Order by name */
+    Name = "NAME",
+    /** Order by template_id */
+    TemplateId = "TEMPLATE_ID",
+    /** Order by template_name */
+    TemplateName = "TEMPLATE_NAME"
 }
 
 /** Filter used to filter IMSProjectTemplate */
@@ -2158,10 +2154,6 @@ export type InterfaceDefinitionFilterInput = {
     not?: InputMaybe<InterfaceDefinitionFilterInput>;
     /** Connects all subformulas via or */
     or?: InputMaybe<Array<InterfaceDefinitionFilterInput>>;
-    /** Filters for nodes where the related node match this filter */
-    template?: InputMaybe<InterfaceDefinitionTemplateFilterInput>;
-    /** Filter for templated fields with matching key and values. Entries are joined by AND */
-    templatedFields?: InputMaybe<Array<InputMaybe<JsonFieldInput>>>;
     /** Filter by visibleDerivedBy */
     visibleDerivedBy?: InputMaybe<RelationListFilterInput>;
     /** Filters for nodes where the related node match this filter */
@@ -2198,22 +2190,6 @@ export enum InterfaceDefinitionOrderField {
     VisibleSelfDefined = "VISIBLE_SELF_DEFINED"
 }
 
-/** Filter used to filter InterfaceDefinitionTemplate */
-export type InterfaceDefinitionTemplateFilterInput = {
-    /** Connects all subformulas via and */
-    and?: InputMaybe<Array<InterfaceDefinitionTemplateFilterInput>>;
-    /** Filter by description */
-    description?: InputMaybe<StringFilterInput>;
-    /** Filter by id */
-    id?: InputMaybe<IdFilterInput>;
-    /** Filter by name */
-    name?: InputMaybe<StringFilterInput>;
-    /** Negates the subformula */
-    not?: InputMaybe<InterfaceDefinitionTemplateFilterInput>;
-    /** Connects all subformulas via or */
-    or?: InputMaybe<Array<InterfaceDefinitionTemplateFilterInput>>;
-};
-
 /** Filter used to filter Interface */
 export type InterfaceFilterInput = {
     /** Filter by affectingIssues */
@@ -2222,8 +2198,6 @@ export type InterfaceFilterInput = {
     aggregatedIssues?: InputMaybe<AggregatedIssueListFilterInput>;
     /** Connects all subformulas via and */
     and?: InputMaybe<Array<InterfaceFilterInput>>;
-    /** Filter by description */
-    description?: InputMaybe<StringFilterInput>;
     /** Filter by id */
     id?: InputMaybe<IdFilterInput>;
     /** Filter by incomingRelations */
@@ -2232,8 +2206,6 @@ export type InterfaceFilterInput = {
     interfaceDefinition?: InputMaybe<InterfaceDefinitionFilterInput>;
     /** Filter by intraComponentDependencyParticipants */
     intraComponentDependencyParticipants?: InputMaybe<IntraComponentDependencyParticipantListFilterInput>;
-    /** Filter by name */
-    name?: InputMaybe<StringFilterInput>;
     /** Negates the subformula */
     not?: InputMaybe<InterfaceFilterInput>;
     /** Connects all subformulas via or */
@@ -2244,27 +2216,7 @@ export type InterfaceFilterInput = {
     partOfProject?: InputMaybe<Scalars["ID"]["input"]>;
     /** Filters for AffectedByIssues which are related to a Trackable */
     relatedTo?: InputMaybe<Scalars["ID"]["input"]>;
-    /** Filters for nodes where the related node match this filter */
-    template?: InputMaybe<InterfaceTemplateFilterInput>;
-    /** Filter for templated fields with matching key and values. Entries are joined by AND */
-    templatedFields?: InputMaybe<Array<InputMaybe<JsonFieldInput>>>;
 };
-
-/** Defines the order of a Interface list */
-export type InterfaceOrder = {
-    /** The direction to order by, defaults to ASC */
-    direction?: InputMaybe<OrderDirection>;
-    /** The field to order by, defaults to ID */
-    field?: InputMaybe<InterfaceOrderField>;
-};
-
-/** Fields a list of Interface can be sorted by */
-export enum InterfaceOrderField {
-    /** Order by id */
-    Id = "ID",
-    /** Order by name */
-    Name = "NAME"
-}
 
 /** Filter used to filter InterfacePart */
 export type InterfacePartFilterInput = {
@@ -2302,8 +2254,6 @@ export type InterfacePartFilterInput = {
 export type InterfacePartInput = {
     /** The description of the NamedNode */
     description: Scalars["String"]["input"];
-    /** The initial value of the extension fields */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
     /** The name of the NamedNode, must not be blank */
     name: Scalars["String"]["input"];
     /** Initial values for all templatedFields */
@@ -2333,7 +2283,11 @@ export enum InterfacePartOrderField {
     /** Order by id */
     Id = "ID",
     /** Order by name */
-    Name = "NAME"
+    Name = "NAME",
+    /** Order by template_id */
+    TemplateId = "TEMPLATE_ID",
+    /** Order by template_name */
+    TemplateName = "TEMPLATE_NAME"
 }
 
 /** Filter used to filter InterfacePartTemplate */
@@ -2454,8 +2408,6 @@ export type InterfaceSpecificationFilterInput = {
 export type InterfaceSpecificationInput = {
     /** The description of the NamedNode */
     description: Scalars["String"]["input"];
-    /** The initial value of the extension fields */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
     /** The name of the NamedNode, must not be blank */
     name: Scalars["String"]["input"];
     /** The template of the created InterfaceSpecification */
@@ -2489,7 +2441,11 @@ export enum InterfaceSpecificationOrderField {
     /** Order by id */
     Id = "ID",
     /** Order by name */
-    Name = "NAME"
+    Name = "NAME",
+    /** Order by template_id */
+    TemplateId = "TEMPLATE_ID",
+    /** Order by template_name */
+    TemplateName = "TEMPLATE_NAME"
 }
 
 /** Filter used to filter InterfaceSpecificationTemplate */
@@ -2556,16 +2512,12 @@ export type InterfaceSpecificationVersionFilterInput = {
     affectingIssues?: InputMaybe<IssueListFilterInput>;
     /** Connects all subformulas via and */
     and?: InputMaybe<Array<InterfaceSpecificationVersionFilterInput>>;
-    /** Filter by description */
-    description?: InputMaybe<StringFilterInput>;
     /** Filter by id */
     id?: InputMaybe<IdFilterInput>;
     /** Filter by interfaceDefinitions */
     interfaceDefinitions?: InputMaybe<InterfaceDefinitionListFilterInput>;
     /** Filters for nodes where the related node match this filter */
     interfaceSpecification?: InputMaybe<InterfaceSpecificationFilterInput>;
-    /** Filter by name */
-    name?: InputMaybe<StringFilterInput>;
     /** Negates the subformula */
     not?: InputMaybe<InterfaceSpecificationVersionFilterInput>;
     /** Connects all subformulas via or */
@@ -2584,14 +2536,10 @@ export type InterfaceSpecificationVersionFilterInput = {
 
 /** Input to create an InterfaceSpecificationVersion */
 export type InterfaceSpecificationVersionInput = {
-    /** The description of the NamedNode */
-    description: Scalars["String"]["input"];
-    /** The initial value of the extension fields */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
-    /** The name of the NamedNode, must not be blank */
-    name: Scalars["String"]["input"];
     /** Initial InterfaceParts */
     parts?: InputMaybe<Array<InterfacePartInput>>;
+    /** The tags of the created InterfaceSpecificationVersion */
+    tags: Array<Scalars["String"]["input"]>;
     /** Initial values for all templatedFields */
     templatedFields: Array<JsonFieldInput>;
     /** The version of the created InterfaceSpecificationVersion */
@@ -2620,8 +2568,10 @@ export type InterfaceSpecificationVersionOrder = {
 export enum InterfaceSpecificationVersionOrderField {
     /** Order by id */
     Id = "ID",
-    /** Order by name */
-    Name = "NAME",
+    /** Order by template_id */
+    TemplateId = "TEMPLATE_ID",
+    /** Order by template_name */
+    TemplateName = "TEMPLATE_NAME",
     /** Order by version */
     Version = "VERSION"
 }
@@ -2640,22 +2590,6 @@ export type InterfaceSpecificationVersionTemplateFilterInput = {
     not?: InputMaybe<InterfaceSpecificationVersionTemplateFilterInput>;
     /** Connects all subformulas via or */
     or?: InputMaybe<Array<InterfaceSpecificationVersionTemplateFilterInput>>;
-};
-
-/** Filter used to filter InterfaceTemplate */
-export type InterfaceTemplateFilterInput = {
-    /** Connects all subformulas via and */
-    and?: InputMaybe<Array<InterfaceTemplateFilterInput>>;
-    /** Filter by description */
-    description?: InputMaybe<StringFilterInput>;
-    /** Filter by id */
-    id?: InputMaybe<IdFilterInput>;
-    /** Filter by name */
-    name?: InputMaybe<StringFilterInput>;
-    /** Negates the subformula */
-    not?: InputMaybe<InterfaceTemplateFilterInput>;
-    /** Connects all subformulas via or */
-    or?: InputMaybe<Array<InterfaceTemplateFilterInput>>;
 };
 
 /** Filter used to filter IntraComponentDependencyParticipant */
@@ -2680,8 +2614,6 @@ export type IntraComponentDependencyParticipantFilterInput = {
 
 /** Input to create a IntraComponentDependencyParticipant */
 export type IntraComponentDependencyParticipantInput = {
-    /** The initial value of the extension fields */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
     /** The ids of includedParts, must all be activeParts on the InterfaceSpecificationVersion associated with `interface` */
     includedParts?: InputMaybe<Array<Scalars["ID"]["input"]>>;
     /**
@@ -2934,12 +2866,32 @@ export enum IssueOrderField {
     LastModifiedAt = "LAST_MODIFIED_AT",
     /** Order by lastUpdatedAt */
     LastUpdatedAt = "LAST_UPDATED_AT",
+    /** Order by priority_id */
+    PriorityId = "PRIORITY_ID",
+    /** Order by priority_name */
+    PriorityName = "PRIORITY_NAME",
+    /** Order by priority_value */
+    PriorityValue = "PRIORITY_VALUE",
     /** Order by spentTime */
     SpentTime = "SPENT_TIME",
     /** Order by startDate */
     StartDate = "START_DATE",
+    /** Order by state_id */
+    StateId = "STATE_ID",
+    /** Order by state_isOpen */
+    StateIsOpen = "STATE_IS_OPEN",
+    /** Order by state_name */
+    StateName = "STATE_NAME",
+    /** Order by template_id */
+    TemplateId = "TEMPLATE_ID",
+    /** Order by template_name */
+    TemplateName = "TEMPLATE_NAME",
     /** Order by title */
-    Title = "TITLE"
+    Title = "TITLE",
+    /** Order by type_id */
+    TypeId = "TYPE_ID",
+    /** Order by type_name */
+    TypeName = "TYPE_NAME"
 }
 
 /** Filter used to filter IssuePriority */
@@ -2968,8 +2920,6 @@ export type IssuePriorityFilterInput = {
 export type IssuePriorityInput = {
     /** The description of the NamedNode */
     description: Scalars["String"]["input"];
-    /** The initial value of the extension fields */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
     /** The name of the NamedNode, must not be blank */
     name: Scalars["String"]["input"];
     /** The value of the created IssuePriority, used to compare/order different IssuePriorities */
@@ -3016,6 +2966,8 @@ export type IssueRelationFilterInput = {
     createdBy?: InputMaybe<UserFilterInput>;
     /** Filter by id */
     id?: InputMaybe<IdFilterInput>;
+    /** Filters for nodes where the related node match this filter */
+    initialType?: InputMaybe<IssueRelationTypeFilterInput>;
     /** Filters for nodes where the related node match this filter */
     issue?: InputMaybe<IssueFilterInput>;
     /** Filter by lastModifiedAt */
@@ -3090,8 +3042,6 @@ export type IssueRelationTypeFilterInput = {
 export type IssueRelationTypeInput = {
     /** The description of the NamedNode */
     description: Scalars["String"]["input"];
-    /** The initial value of the extension fields */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
     /** The inverse name of the IssueRelationType, must not be blank */
     inverseName: Scalars["String"]["input"];
     /** The name of the NamedNode, must not be blank */
@@ -3152,8 +3102,6 @@ export type IssueStateFilterInput = {
 export type IssueStateInput = {
     /** The description of the NamedNode */
     description: Scalars["String"]["input"];
-    /** The initial value of the extension fields */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
     /** The value for the isOpen field of the created IssueState */
     isOpen: Scalars["Boolean"]["input"];
     /** The name of the NamedNode, must not be blank */
@@ -3270,8 +3218,6 @@ export type IssueTypeFilterInput = {
 export type IssueTypeInput = {
     /** The description of the NamedNode */
     description: Scalars["String"]["input"];
-    /** The initial value of the extension fields */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
     /** A path that is used as the icon for issues. Used with a 0 0 100 100 viewBox. No stroke, only fill. */
     iconPath: Scalars["String"]["input"];
     /** The name of the NamedNode, must not be blank */
@@ -3479,22 +3425,6 @@ export type NullableStringFilterInput = {
     startsWith?: InputMaybe<Scalars["String"]["input"]>;
 };
 
-/** Input to create a SubTemplate, where all templatedFieldSpecifications must allow null as value */
-export type NullableSubTemplateInput = {
-    /** The description of the NamedNode */
-    description: Scalars["String"]["input"];
-    /** The initial value of the extension fields */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
-    /** The name of the NamedNode, must not be blank */
-    name: Scalars["String"]["input"];
-    /**
-     * Additional initial templateFieldSpecifications, should be a JSON schema JSON.
-     *         Must be disjoint with templateFieldSpecifications of templates this template extends.
-     *
-     */
-    templateFieldSpecifications?: InputMaybe<Array<JsonFieldInput>>;
-};
-
 /** Possible direction in which a list of nodes can be ordered */
 export enum OrderDirection {
     /** Ascending */
@@ -3543,6 +3473,14 @@ export enum PermissionEntry {
     CanCreateTemplates = "CAN_CREATE_TEMPLATES"
 }
 
+/** A point in a 2D coordinate system */
+export type PointInput = {
+    /** The x coordinate of the point */
+    x: Scalars["Int"]["input"];
+    /** The y coordinate of the point */
+    y: Scalars["Int"]["input"];
+};
+
 /** Filter used to filter Project */
 export type ProjectFilterInput = {
     /** Filter by affectingIssues */
@@ -3553,6 +3491,8 @@ export type ProjectFilterInput = {
     artefacts?: InputMaybe<ArtefactListFilterInput>;
     /** Filter by components */
     components?: InputMaybe<ComponentVersionListFilterInput>;
+    /** Filters for nodes where the related node match this filter */
+    defaultView?: InputMaybe<ViewFilterInput>;
     /** Filter by description */
     description?: InputMaybe<StringFilterInput>;
     /** Filter by id */
@@ -3573,10 +3513,16 @@ export type ProjectFilterInput = {
     pinnedIssues?: InputMaybe<IssueListFilterInput>;
     /** Filters for AffectedByIssues which are related to a Trackable */
     relatedTo?: InputMaybe<Scalars["ID"]["input"]>;
+    /** Filter by relationLayouts */
+    relationLayouts?: InputMaybe<RelationLayoutListFilterInput>;
+    /** Filter by relationPartnerLayouts */
+    relationPartnerLayouts?: InputMaybe<RelationPartnerLayoutListFilterInput>;
     /** Filter by repositoryURL */
     repositoryURL?: InputMaybe<NullableStringFilterInput>;
     /** Filter by syncsTo */
     syncsTo?: InputMaybe<ImsProjectListFilterInput>;
+    /** Filter by views */
+    views?: InputMaybe<ViewListFilterInput>;
 };
 
 /** Used to filter by a connection-based property. Fields are joined by AND */
@@ -3660,6 +3606,8 @@ export enum ProjectPermissionEntry {
      * Also allows to delete a Label, but only if it is allowed on all Trackable the Label is on.
      */
     ManageLabels = "MANAGE_LABELS",
+    /** Allows to manage the views of this Project. */
+    ManageViews = "MANAGE_VIEWS",
     /**
      * Allows to moderate Issues on this Trackable.
      * This allows everything `MANAGE_ISSUES` allows.
@@ -3745,8 +3693,6 @@ export type RelationConditionFilterInput = {
 
 /** Input to create a RelationCondition */
 export type RelationConditionInput = {
-    /** The initial value of the extension fields */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
     /** IDs of Templates of allowed start RelationPartners */
     from: Array<Scalars["ID"]["input"]>;
     /** Defines which InterfaceSpecifications are derived via the relation */
@@ -3807,6 +3753,54 @@ export type RelationFilterInput = {
     templatedFields?: InputMaybe<Array<InputMaybe<JsonFieldInput>>>;
 };
 
+/** Filter used to filter RelationLayout */
+export type RelationLayoutFilterInput = {
+    /** Connects all subformulas via and */
+    and?: InputMaybe<Array<RelationLayoutFilterInput>>;
+    /** Filter by id */
+    id?: InputMaybe<IdFilterInput>;
+    /** Negates the subformula */
+    not?: InputMaybe<RelationLayoutFilterInput>;
+    /** Connects all subformulas via or */
+    or?: InputMaybe<Array<RelationLayoutFilterInput>>;
+    /** Filters for nodes where the related node match this filter */
+    project?: InputMaybe<ProjectFilterInput>;
+    /** Filters for nodes where the related node match this filter */
+    relation?: InputMaybe<RelationFilterInput>;
+    /** Filters for nodes where the related node match this filter */
+    view?: InputMaybe<ViewFilterInput>;
+};
+
+/** Input which defines the layout of a Relation */
+export type RelationLayoutInput = {
+    /** List of intermediate points of the relation */
+    points: Array<PointInput>;
+};
+
+/** Used to filter by a connection-based property. Fields are joined by AND */
+export type RelationLayoutListFilterInput = {
+    /** Filters for nodes where all of the related nodes match this filter */
+    all?: InputMaybe<RelationLayoutFilterInput>;
+    /** Filters for nodes where any of the related nodes match this filter */
+    any?: InputMaybe<RelationLayoutFilterInput>;
+    /** Filters for nodes where none of the related nodes match this filter */
+    none?: InputMaybe<RelationLayoutFilterInput>;
+};
+
+/** Defines the order of a RelationLayout list */
+export type RelationLayoutOrder = {
+    /** The direction to order by, defaults to ASC */
+    direction?: InputMaybe<OrderDirection>;
+    /** The field to order by, defaults to ID */
+    field?: InputMaybe<RelationLayoutOrderField>;
+};
+
+/** Fields a list of RelationLayout can be sorted by */
+export enum RelationLayoutOrderField {
+    /** Order by id */
+    Id = "ID"
+}
+
 /** Used to filter by a connection-based property. Fields are joined by AND */
 export type RelationListFilterInput = {
     /** Filters for nodes where all of the related nodes match this filter */
@@ -3827,8 +3821,16 @@ export type RelationOrder = {
 
 /** Fields a list of Relation can be sorted by */
 export enum RelationOrderField {
+    /** Order by end_id */
+    EndId = "END_ID",
     /** Order by id */
-    Id = "ID"
+    Id = "ID",
+    /** Order by start_id */
+    StartId = "START_ID",
+    /** Order by template_id */
+    TemplateId = "TEMPLATE_ID",
+    /** Order by template_name */
+    TemplateName = "TEMPLATE_NAME"
 }
 
 /** Filter used to filter RelationPartner */
@@ -3839,14 +3841,10 @@ export type RelationPartnerFilterInput = {
     aggregatedIssues?: InputMaybe<AggregatedIssueListFilterInput>;
     /** Connects all subformulas via and */
     and?: InputMaybe<Array<RelationPartnerFilterInput>>;
-    /** Filter by description */
-    description?: InputMaybe<StringFilterInput>;
     /** Filter by id */
     id?: InputMaybe<IdFilterInput>;
     /** Filter by incomingRelations */
     incomingRelations?: InputMaybe<RelationListFilterInput>;
-    /** Filter by name */
-    name?: InputMaybe<StringFilterInput>;
     /** Negates the subformula */
     not?: InputMaybe<RelationPartnerFilterInput>;
     /** Connects all subformulas via or */
@@ -3857,9 +3855,55 @@ export type RelationPartnerFilterInput = {
     partOfProject?: InputMaybe<Scalars["ID"]["input"]>;
     /** Filters for AffectedByIssues which are related to a Trackable */
     relatedTo?: InputMaybe<Scalars["ID"]["input"]>;
-    /** Filter for templated fields with matching key and values. Entries are joined by AND */
-    templatedFields?: InputMaybe<Array<InputMaybe<JsonFieldInput>>>;
 };
+
+/** Filter used to filter RelationPartnerLayout */
+export type RelationPartnerLayoutFilterInput = {
+    /** Connects all subformulas via and */
+    and?: InputMaybe<Array<RelationPartnerLayoutFilterInput>>;
+    /** Filter by id */
+    id?: InputMaybe<IdFilterInput>;
+    /** Negates the subformula */
+    not?: InputMaybe<RelationPartnerLayoutFilterInput>;
+    /** Connects all subformulas via or */
+    or?: InputMaybe<Array<RelationPartnerLayoutFilterInput>>;
+    /** Filters for nodes where the related node match this filter */
+    project?: InputMaybe<ProjectFilterInput>;
+    /** Filters for nodes where the related node match this filter */
+    relationPartner?: InputMaybe<RelationPartnerFilterInput>;
+    /** Filters for nodes where the related node match this filter */
+    view?: InputMaybe<ViewFilterInput>;
+};
+
+/** Input which defines the layout of a RelationPartner */
+export type RelationPartnerLayoutInput = {
+    /** The position of the RelationPartner */
+    pos: PointInput;
+};
+
+/** Used to filter by a connection-based property. Fields are joined by AND */
+export type RelationPartnerLayoutListFilterInput = {
+    /** Filters for nodes where all of the related nodes match this filter */
+    all?: InputMaybe<RelationPartnerLayoutFilterInput>;
+    /** Filters for nodes where any of the related nodes match this filter */
+    any?: InputMaybe<RelationPartnerLayoutFilterInput>;
+    /** Filters for nodes where none of the related nodes match this filter */
+    none?: InputMaybe<RelationPartnerLayoutFilterInput>;
+};
+
+/** Defines the order of a RelationPartnerLayout list */
+export type RelationPartnerLayoutOrder = {
+    /** The direction to order by, defaults to ASC */
+    direction?: InputMaybe<OrderDirection>;
+    /** The field to order by, defaults to ID */
+    field?: InputMaybe<RelationPartnerLayoutOrderField>;
+};
+
+/** Fields a list of RelationPartnerLayout can be sorted by */
+export enum RelationPartnerLayoutOrderField {
+    /** Order by id */
+    Id = "ID"
+}
 
 /** Filter used to filter RelationPartnerTemplate */
 export type RelationPartnerTemplateFilterInput = {
@@ -4089,8 +4133,6 @@ export type StrokeStyleInput = {
 export type SubTemplateInput = {
     /** The description of the NamedNode */
     description: Scalars["String"]["input"];
-    /** The initial value of the extension fields */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
     /** The name of the NamedNode, must not be blank */
     name: Scalars["String"]["input"];
     /**
@@ -4100,6 +4142,52 @@ export type SubTemplateInput = {
      */
     templateFieldSpecifications?: InputMaybe<Array<JsonFieldInput>>;
 };
+
+/** Filter used to filter SyncPermissionTarget */
+export type SyncPermissionTargetFilterInput = {
+    /** Connects all subformulas via and */
+    and?: InputMaybe<Array<SyncPermissionTargetFilterInput>>;
+    /** Filter by description */
+    description?: InputMaybe<StringFilterInput>;
+    /** Filter by id */
+    id?: InputMaybe<IdFilterInput>;
+    /** Filter by name */
+    name?: InputMaybe<StringFilterInput>;
+    /** Negates the subformula */
+    not?: InputMaybe<SyncPermissionTargetFilterInput>;
+    /** Connects all subformulas via or */
+    or?: InputMaybe<Array<SyncPermissionTargetFilterInput>>;
+    /** Filter by syncOthersAllowedBy */
+    syncOthersAllowedBy?: InputMaybe<GropiusUserListFilterInput>;
+    /** Filter by syncSelfAllowedBy */
+    syncSelfAllowedBy?: InputMaybe<GropiusUserListFilterInput>;
+};
+
+/** Used to filter by a connection-based property. Fields are joined by AND */
+export type SyncPermissionTargetListFilterInput = {
+    /** Filters for nodes where all of the related nodes match this filter */
+    all?: InputMaybe<SyncPermissionTargetFilterInput>;
+    /** Filters for nodes where any of the related nodes match this filter */
+    any?: InputMaybe<SyncPermissionTargetFilterInput>;
+    /** Filters for nodes where none of the related nodes match this filter */
+    none?: InputMaybe<SyncPermissionTargetFilterInput>;
+};
+
+/** Defines the order of a SyncPermissionTarget list */
+export type SyncPermissionTargetOrder = {
+    /** The direction to order by, defaults to ASC */
+    direction?: InputMaybe<OrderDirection>;
+    /** The field to order by, defaults to ID */
+    field?: InputMaybe<SyncPermissionTargetOrderField>;
+};
+
+/** Fields a list of SyncPermissionTarget can be sorted by */
+export enum SyncPermissionTargetOrderField {
+    /** Order by id */
+    Id = "ID",
+    /** Order by name */
+    Name = "NAME"
+}
 
 /** Filter used to filter TimelineItem */
 export type TimelineItemFilterInput = {
@@ -4177,10 +4265,6 @@ export enum TimelineItemType {
     Body = "BODY",
     /** Comment timeline item */
     Comment = "COMMENT",
-    /** DueDateChangedEvent timeline item */
-    DueDateChangedEvent = "DUE_DATE_CHANGED_EVENT",
-    /** EstimatedTimeChangedEvent timeline item */
-    EstimatedTimeChangedEvent = "ESTIMATED_TIME_CHANGED_EVENT",
     /** IncomingRelationTypeChangedEvent timeline item */
     IncomingRelationTypeChangedEvent = "INCOMING_RELATION_TYPE_CHANGED_EVENT",
     /** IssueComment timeline item */
@@ -4219,10 +4303,6 @@ export enum TimelineItemType {
     RemovedRelationEvent = "REMOVED_RELATION_EVENT",
     /** RemovedTemplatedFieldEvent timeline item */
     RemovedTemplatedFieldEvent = "REMOVED_TEMPLATED_FIELD_EVENT",
-    /** SpentTimeChangedEvent timeline item */
-    SpentTimeChangedEvent = "SPENT_TIME_CHANGED_EVENT",
-    /** StartDateChangedEvent timeline item */
-    StartDateChangedEvent = "START_DATE_CHANGED_EVENT",
     /** StateChangedEvent timeline item */
     StateChangedEvent = "STATE_CHANGED_EVENT",
     /** TemplatedFieldChangedEvent timeline item */
@@ -4305,8 +4385,6 @@ export type TypeMappingInput = {
 
 /** Input for the updateArtefact mutation */
 export type UpdateArtefactInput = {
-    /** Extension fields to update. To remove, provide no value */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
     /** The new file of the Artefact */
     file?: InputMaybe<Scalars["URL"]["input"]>;
     /** The new value of the from field of the Artefact */
@@ -4332,8 +4410,6 @@ export type UpdateArtefactInput = {
 export type UpdateBodyInput = {
     /** The body of the Comment */
     body?: InputMaybe<Scalars["String"]["input"]>;
-    /** Extension fields to update. To remove, provide no value */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
     /** The id of the node to update */
     id: Scalars["ID"]["input"];
 };
@@ -4351,8 +4427,6 @@ export type UpdateComponentInput = {
     componentVersionTemplatedFields?: InputMaybe<Array<JsonFieldInput>>;
     /** The description of the NamedNode */
     description?: InputMaybe<Scalars["String"]["input"]>;
-    /** Extension fields to update. To remove, provide no value */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
     /** The id of the node to update */
     id: Scalars["ID"]["input"];
     /** The new name of the NamedNode, must not be empty */
@@ -4385,7 +4459,7 @@ export type UpdateComponentPermissionInput = {
     addedUsers?: InputMaybe<Array<Scalars["ID"]["input"]>>;
     /** The new value for allUsers */
     allUsers?: InputMaybe<Scalars["Boolean"]["input"]>;
-    /** The description of the BasePermission */
+    /** The description of the NamedNode */
     description?: InputMaybe<Scalars["String"]["input"]>;
     /** The id of the node to update */
     id: Scalars["ID"]["input"];
@@ -4399,26 +4473,14 @@ export type UpdateComponentPermissionInput = {
 
 /** Input for the updateComponentVersion mutation */
 export type UpdateComponentVersionInput = {
-    /** The description of the NamedNode */
-    description?: InputMaybe<Scalars["String"]["input"]>;
-    /** Extension fields to update. To remove, provide no value */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
     /** The id of the node to update */
     id: Scalars["ID"]["input"];
-    /** The new name of the NamedNode, must not be empty */
-    name?: InputMaybe<Scalars["String"]["input"]>;
+    /** New tags of the ComponentVersion */
+    tags?: InputMaybe<Array<Scalars["String"]["input"]>>;
     /** Values for templatedFields to update */
     templatedFields?: InputMaybe<Array<JsonFieldInput>>;
     /** New version of the ComponentVersion */
     version?: InputMaybe<Scalars["String"]["input"]>;
-};
-
-/** Input for the updateExtensionFields mutation */
-export type UpdateExtensionFieldsInput = {
-    /** Extension fields to update. To remove, provide no value */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
-    /** The id of the node to update */
-    id: Scalars["ID"]["input"];
 };
 
 /** Input for the updateGlobalPermission mutation */
@@ -4429,7 +4491,7 @@ export type UpdateGlobalPermissionInput = {
     addedUsers?: InputMaybe<Array<Scalars["ID"]["input"]>>;
     /** The new value for allUsers */
     allUsers?: InputMaybe<Scalars["Boolean"]["input"]>;
-    /** The description of the BasePermission */
+    /** The description of the NamedNode */
     description?: InputMaybe<Scalars["String"]["input"]>;
     /** The id of the node to update */
     id: Scalars["ID"]["input"];
@@ -4449,8 +4511,6 @@ export type UpdateGropiusUserInput = {
     displayName?: InputMaybe<Scalars["String"]["input"]>;
     /** The new email of the User to update */
     email?: InputMaybe<Scalars["String"]["input"]>;
-    /** Extension fields to update. To remove, provide no value */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
     /** The id of the node to update */
     id: Scalars["ID"]["input"];
     /** The new value for isAdmin of the GropiusUser to update */
@@ -4463,8 +4523,6 @@ export type UpdateImsInput = {
     addedPermissions?: InputMaybe<Array<Scalars["ID"]["input"]>>;
     /** The description of the NamedNode */
     description?: InputMaybe<Scalars["String"]["input"]>;
-    /** Extension fields to update. To remove, provide no value */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
     /** The id of the node to update */
     id: Scalars["ID"]["input"];
     /** The new name of the NamedNode, must not be empty */
@@ -4487,7 +4545,7 @@ export type UpdateImsPermissionInput = {
     addedUsers?: InputMaybe<Array<Scalars["ID"]["input"]>>;
     /** The new value for allUsers */
     allUsers?: InputMaybe<Scalars["Boolean"]["input"]>;
-    /** The description of the BasePermission */
+    /** The description of the NamedNode */
     description?: InputMaybe<Scalars["String"]["input"]>;
     /** The id of the node to update */
     id: Scalars["ID"]["input"];
@@ -4501,30 +4559,8 @@ export type UpdateImsPermissionInput = {
 
 /** Input for the updateIMSProject mutation */
 export type UpdateImsProjectInput = {
-    /** Extension fields to update. To remove, provide no value */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
-    /** The id of the node to update */
-    id: Scalars["ID"]["input"];
-    /** Values for templatedFields to update */
-    templatedFields?: InputMaybe<Array<JsonFieldInput>>;
-};
-
-/** Input for the updateInterfaceDefinition mutation */
-export type UpdateInterfaceDefinitionInput = {
-    /** Extension fields to update. To remove, provide no value */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
-    /** The id of the node to update */
-    id: Scalars["ID"]["input"];
-    /** Values for templatedFields to update */
-    templatedFields?: InputMaybe<Array<JsonFieldInput>>;
-};
-
-/** Input for the updateInterface mutation */
-export type UpdateInterfaceInput = {
     /** The description of the NamedNode */
     description?: InputMaybe<Scalars["String"]["input"]>;
-    /** Extension fields to update. To remove, provide no value */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
     /** The id of the node to update */
     id: Scalars["ID"]["input"];
     /** The new name of the NamedNode, must not be empty */
@@ -4537,8 +4573,6 @@ export type UpdateInterfaceInput = {
 export type UpdateInterfacePartInput = {
     /** The description of the NamedNode */
     description?: InputMaybe<Scalars["String"]["input"]>;
-    /** Extension fields to update. To remove, provide no value */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
     /** The id of the node to update */
     id: Scalars["ID"]["input"];
     /** The new name of the NamedNode, must not be empty */
@@ -4551,17 +4585,8 @@ export type UpdateInterfacePartInput = {
 export type UpdateInterfaceSpecificationInput = {
     /** The description of the NamedNode */
     description?: InputMaybe<Scalars["String"]["input"]>;
-    /** Extension fields to update. To remove, provide no value */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
     /** The id of the node to update */
     id: Scalars["ID"]["input"];
-    /**
-     * Values for templatedFields of InterfaceDefinitions to update.
-     *         Only evaluated if `template` is provided!
-     *         Affect all InterfaceDefinitions of the updated InterfaceSpecification
-     *
-     */
-    interfaceDefinitionTemplatedFields?: InputMaybe<Array<JsonFieldInput>>;
     /**
      * Values for templatedFields of InterfaceParts to update.
      *         Only evaluated if `template` is provided!
@@ -4576,13 +4601,6 @@ export type UpdateInterfaceSpecificationInput = {
      *
      */
     interfaceSpecificationVersionTemplatedFields?: InputMaybe<Array<JsonFieldInput>>;
-    /**
-     * Values for templatedFields of Interfaces to update.
-     *         Only evaluated if `template` is provided!
-     *         Affect all Interfaces of the updated InterfaceSpecification
-     *
-     */
-    interfaceTemplatedFields?: InputMaybe<Array<JsonFieldInput>>;
     /** The new name of the NamedNode, must not be empty */
     name?: InputMaybe<Scalars["String"]["input"]>;
     /**
@@ -4598,14 +4616,10 @@ export type UpdateInterfaceSpecificationInput = {
 
 /** Input for the updateInterfaceSpecificationVersion mutation */
 export type UpdateInterfaceSpecificationVersionInput = {
-    /** The description of the NamedNode */
-    description?: InputMaybe<Scalars["String"]["input"]>;
-    /** Extension fields to update. To remove, provide no value */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
     /** The id of the node to update */
     id: Scalars["ID"]["input"];
-    /** The new name of the NamedNode, must not be empty */
-    name?: InputMaybe<Scalars["String"]["input"]>;
+    /** New tags of the InterfaceSpecificationVersion */
+    tags?: InputMaybe<Array<Scalars["String"]["input"]>>;
     /** Values for templatedFields to update */
     templatedFields?: InputMaybe<Array<JsonFieldInput>>;
     /** New version of the InterfaceSpecificationVersion */
@@ -4620,8 +4634,6 @@ export type UpdateIntraComponentDependencySpecificationInput = {
     addedOutgoingParticipants?: InputMaybe<Array<IntraComponentDependencyParticipantInput>>;
     /** The description of the NamedNode */
     description?: InputMaybe<Scalars["String"]["input"]>;
-    /** Extension fields to update. To remove, provide no value */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
     /** The id of the node to update */
     id: Scalars["ID"]["input"];
     /** The new name of the NamedNode, must not be empty */
@@ -4638,8 +4650,6 @@ export type UpdateIssueCommentInput = {
     addedReferencedArtefacts?: InputMaybe<Array<Scalars["ID"]["input"]>>;
     /** The body of the Comment */
     body?: InputMaybe<Scalars["String"]["input"]>;
-    /** Extension fields to update. To remove, provide no value */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
     /** The id of the node to update */
     id: Scalars["ID"]["input"];
     /** Ids of Artefacts which should be removed from `referencedArtefacts` */
@@ -4652,8 +4662,6 @@ export type UpdateLabelInput = {
     color?: InputMaybe<Scalars["String"]["input"]>;
     /** The description of the NamedNode */
     description?: InputMaybe<Scalars["String"]["input"]>;
-    /** Extension fields to update. To remove, provide no value */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
     /** The id of the node to update */
     id: Scalars["ID"]["input"];
     /** The new name of the NamedNode, must not be empty */
@@ -4664,14 +4672,18 @@ export type UpdateLabelInput = {
 export type UpdateProjectInput = {
     /** Ids of permissions to add, must be disjoint with removedPermissions. */
     addedPermissions?: InputMaybe<Array<Scalars["ID"]["input"]>>;
+    /** The default view for the project */
+    defaultView?: InputMaybe<Scalars["ID"]["input"]>;
     /** The description of the NamedNode */
     description?: InputMaybe<Scalars["String"]["input"]>;
-    /** Extension fields to update. To remove, provide no value */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
     /** The id of the node to update */
     id: Scalars["ID"]["input"];
     /** The new name of the NamedNode, must not be empty */
     name?: InputMaybe<Scalars["String"]["input"]>;
+    /** Defines the new layout of a set of Relations */
+    relationLayouts?: InputMaybe<Array<UpdateRelationLayoutInput>>;
+    /** Defines the new layout of a set of RelationPartners */
+    relationPartnerLayouts?: InputMaybe<Array<UpdateRelationPartnerLayoutInput>>;
     /**
      * Ids of permissions to remove, must be disjoint with addedPermissions.
      *         There must always be at least one permissions granting ADMIN to some GropiusUser left.
@@ -4690,7 +4702,7 @@ export type UpdateProjectPermissionInput = {
     addedUsers?: InputMaybe<Array<Scalars["ID"]["input"]>>;
     /** The new value for allUsers */
     allUsers?: InputMaybe<Scalars["Boolean"]["input"]>;
-    /** The description of the BasePermission */
+    /** The description of the NamedNode */
     description?: InputMaybe<Scalars["String"]["input"]>;
     /** The id of the node to update */
     id: Scalars["ID"]["input"];
@@ -4708,8 +4720,6 @@ export type UpdateRelationInput = {
     addedEndParts?: InputMaybe<Array<Scalars["ID"]["input"]>>;
     /** Ids of InterfaceParts of the `start` Interface to add to `startParts` */
     addedStartParts?: InputMaybe<Array<Scalars["ID"]["input"]>>;
-    /** Extension fields to update. To remove, provide no value */
-    extensionFields?: InputMaybe<Array<JsonFieldInput>>;
     /** The id of the node to update */
     id: Scalars["ID"]["input"];
     /** Ids of InterfaceParts of the `end` Interface to remove from `endParts` */
@@ -4728,12 +4738,54 @@ export type UpdateRelationInput = {
     templatedFields?: InputMaybe<Array<JsonFieldInput>>;
 };
 
+/** Input to update the layout of a Relation */
+export type UpdateRelationLayoutInput = {
+    /** The new layout of the Relation, or null if the layout should be reset */
+    layout?: InputMaybe<RelationLayoutInput>;
+    /** The id of the Relation of which to update the layout */
+    relation: Scalars["ID"]["input"];
+};
+
+/** Input to update the layout of a RelationPartner */
+export type UpdateRelationPartnerLayoutInput = {
+    /** The new layout of the RelationPartner, or null if the layout should be reset */
+    layout?: InputMaybe<RelationPartnerLayoutInput>;
+    /** The id of the RelationPartner of which to update the layout */
+    relationPartner: Scalars["ID"]["input"];
+};
+
+/** Input for the updateSyncPermissions mutation */
+export type UpdateSyncPermissionsInput = {
+    /** Whether the sync service is allowed to sync content of other users */
+    canSyncOthers?: InputMaybe<Scalars["Boolean"]["input"]>;
+    /** Whether the sync service is allowed to sync content of the user */
+    canSyncSelf?: InputMaybe<Scalars["Boolean"]["input"]>;
+    /** The SyncPermissionTarget to update the sync permissions for the current user */
+    id: Scalars["ID"]["input"];
+};
+
 /** Input for the updateTemplateDeprecationStatus mutation */
 export type UpdateTemplateDeprecationStatusInput = {
     /** The id of the node to update */
     id: Scalars["ID"]["input"];
     /** The new deprecation status of the template */
     isDeprecated: Scalars["Boolean"]["input"];
+};
+
+/** Input for the updateView mutation */
+export type UpdateViewInput = {
+    /** The description of the NamedNode */
+    description?: InputMaybe<Scalars["String"]["input"]>;
+    /** The new filter of the view */
+    filterByTemplate?: InputMaybe<Array<Scalars["ID"]["input"]>>;
+    /** The id of the node to update */
+    id: Scalars["ID"]["input"];
+    /** The new name of the NamedNode, must not be empty */
+    name?: InputMaybe<Scalars["String"]["input"]>;
+    /** Defines the new layout of a set of Relations */
+    relationLayouts?: InputMaybe<Array<UpdateRelationLayoutInput>>;
+    /** Defines the new layout of a set of RelationPartners */
+    relationPartnerLayouts?: InputMaybe<Array<UpdateRelationPartnerLayoutInput>>;
 };
 
 /** Filter used to filter User */
@@ -4788,6 +4840,56 @@ export enum UserOrderField {
     Id = "ID",
     /** Order by username */
     Username = "USERNAME"
+}
+
+/** Filter used to filter View */
+export type ViewFilterInput = {
+    /** Connects all subformulas via and */
+    and?: InputMaybe<Array<ViewFilterInput>>;
+    /** Filter by description */
+    description?: InputMaybe<StringFilterInput>;
+    /** Filter by filterByTemplate */
+    filterByTemplate?: InputMaybe<ComponentTemplateListFilterInput>;
+    /** Filter by id */
+    id?: InputMaybe<IdFilterInput>;
+    /** Filter by name */
+    name?: InputMaybe<StringFilterInput>;
+    /** Negates the subformula */
+    not?: InputMaybe<ViewFilterInput>;
+    /** Connects all subformulas via or */
+    or?: InputMaybe<Array<ViewFilterInput>>;
+    /** Filters for nodes where the related node match this filter */
+    project?: InputMaybe<ProjectFilterInput>;
+    /** Filter by relationLayouts */
+    relationLayouts?: InputMaybe<RelationLayoutListFilterInput>;
+    /** Filter by relationPartnerLayouts */
+    relationPartnerLayouts?: InputMaybe<RelationPartnerLayoutListFilterInput>;
+};
+
+/** Used to filter by a connection-based property. Fields are joined by AND */
+export type ViewListFilterInput = {
+    /** Filters for nodes where all of the related nodes match this filter */
+    all?: InputMaybe<ViewFilterInput>;
+    /** Filters for nodes where any of the related nodes match this filter */
+    any?: InputMaybe<ViewFilterInput>;
+    /** Filters for nodes where none of the related nodes match this filter */
+    none?: InputMaybe<ViewFilterInput>;
+};
+
+/** Defines the order of a View list */
+export type ViewOrder = {
+    /** The direction to order by, defaults to ASC */
+    direction?: InputMaybe<OrderDirection>;
+    /** The field to order by, defaults to ID */
+    field?: InputMaybe<ViewOrderField>;
+};
+
+/** Fields a list of View can be sorted by */
+export enum ViewOrderField {
+    /** Order by id */
+    Id = "ID",
+    /** Order by name */
+    Name = "NAME"
 }
 
 type BaseTemplateInfo_ArtefactTemplate_Fragment = {
@@ -4846,14 +4948,6 @@ type BaseTemplateInfo_ImsUserTemplate_Fragment = {
     templateFieldSpecifications: Array<{ __typename?: "JSONField"; name: string; value?: any | null }>;
 };
 
-type BaseTemplateInfo_InterfaceDefinitionTemplate_Fragment = {
-    __typename?: "InterfaceDefinitionTemplate";
-    id: string;
-    name: string;
-    description: string;
-    templateFieldSpecifications: Array<{ __typename?: "JSONField"; name: string; value?: any | null }>;
-};
-
 type BaseTemplateInfo_InterfacePartTemplate_Fragment = {
     __typename?: "InterfacePartTemplate";
     id: string;
@@ -4872,14 +4966,6 @@ type BaseTemplateInfo_InterfaceSpecificationTemplate_Fragment = {
 
 type BaseTemplateInfo_InterfaceSpecificationVersionTemplate_Fragment = {
     __typename?: "InterfaceSpecificationVersionTemplate";
-    id: string;
-    name: string;
-    description: string;
-    templateFieldSpecifications: Array<{ __typename?: "JSONField"; name: string; value?: any | null }>;
-};
-
-type BaseTemplateInfo_InterfaceTemplate_Fragment = {
-    __typename?: "InterfaceTemplate";
     id: string;
     name: string;
     description: string;
@@ -4910,11 +4996,9 @@ export type BaseTemplateInfoFragment =
     | BaseTemplateInfo_ImsProjectTemplate_Fragment
     | BaseTemplateInfo_ImsTemplate_Fragment
     | BaseTemplateInfo_ImsUserTemplate_Fragment
-    | BaseTemplateInfo_InterfaceDefinitionTemplate_Fragment
     | BaseTemplateInfo_InterfacePartTemplate_Fragment
     | BaseTemplateInfo_InterfaceSpecificationTemplate_Fragment
     | BaseTemplateInfo_InterfaceSpecificationVersionTemplate_Fragment
-    | BaseTemplateInfo_InterfaceTemplate_Fragment
     | BaseTemplateInfo_IssueTemplate_Fragment
     | BaseTemplateInfo_RelationTemplate_Fragment;
 
@@ -5030,20 +5114,6 @@ export type FullInterfaceSpecificationTemplateInfoFragment = {
         description: string;
         templateFieldSpecifications: Array<{ __typename?: "JSONField"; name: string; value?: any | null }>;
     };
-    interfaceDefinitionTemplate: {
-        __typename?: "InterfaceDefinitionTemplate";
-        id: string;
-        name: string;
-        description: string;
-        templateFieldSpecifications: Array<{ __typename?: "JSONField"; name: string; value?: any | null }>;
-    };
-    interfaceTemplate: {
-        __typename?: "InterfaceTemplate";
-        id: string;
-        name: string;
-        description: string;
-        templateFieldSpecifications: Array<{ __typename?: "JSONField"; name: string; value?: any | null }>;
-    };
     interfacePartTemplate: {
         __typename?: "InterfacePartTemplate";
         id: string;
@@ -5143,8 +5213,6 @@ export type GetFullIssueTemplateQuery = {
         | { __typename?: "ComponentTemplate" }
         | { __typename?: "ComponentVersion" }
         | { __typename?: "ComponentVersionTemplate" }
-        | { __typename?: "DueDateChangedEvent" }
-        | { __typename?: "EstimatedTimeChangedEvent" }
         | { __typename?: "FillStyle" }
         | { __typename?: "GlobalPermission" }
         | { __typename?: "GropiusUser" }
@@ -5160,7 +5228,6 @@ export type GetFullIssueTemplateQuery = {
         | { __typename?: "IncomingRelationTypeChangedEvent" }
         | { __typename?: "Interface" }
         | { __typename?: "InterfaceDefinition" }
-        | { __typename?: "InterfaceDefinitionTemplate" }
         | { __typename?: "InterfacePart" }
         | { __typename?: "InterfacePartTemplate" }
         | { __typename?: "InterfaceSpecification" }
@@ -5168,7 +5235,6 @@ export type GetFullIssueTemplateQuery = {
         | { __typename?: "InterfaceSpecificationTemplate" }
         | { __typename?: "InterfaceSpecificationVersion" }
         | { __typename?: "InterfaceSpecificationVersionTemplate" }
-        | { __typename?: "InterfaceTemplate" }
         | { __typename?: "IntraComponentDependencyParticipant" }
         | { __typename?: "IntraComponentDependencySpecification" }
         | { __typename?: "Issue" }
@@ -5234,7 +5300,6 @@ export type GetFullIssueTemplateQuery = {
           }
         | { __typename?: "IssueType" }
         | { __typename?: "Label" }
-        | { __typename?: "MetaAggregatedIssueRelation" }
         | { __typename?: "OutgoingRelationTypeChangedEvent" }
         | { __typename?: "PriorityChangedEvent" }
         | { __typename?: "Project" }
@@ -5242,6 +5307,8 @@ export type GetFullIssueTemplateQuery = {
         | { __typename?: "RelatedByIssueEvent" }
         | { __typename?: "Relation" }
         | { __typename?: "RelationCondition" }
+        | { __typename?: "RelationLayout" }
+        | { __typename?: "RelationPartnerLayout" }
         | { __typename?: "RelationTemplate" }
         | { __typename?: "RemovedAffectedEntityEvent" }
         | { __typename?: "RemovedArtefactEvent" }
@@ -5252,14 +5319,13 @@ export type GetFullIssueTemplateQuery = {
         | { __typename?: "RemovedLabelEvent" }
         | { __typename?: "RemovedOutgoingRelationEvent" }
         | { __typename?: "RemovedTemplatedFieldEvent" }
-        | { __typename?: "SpentTimeChangedEvent" }
-        | { __typename?: "StartDateChangedEvent" }
         | { __typename?: "StateChangedEvent" }
         | { __typename?: "StrokeStyle" }
         | { __typename?: "TemplateChangedEvent" }
         | { __typename?: "TemplatedFieldChangedEvent" }
         | { __typename?: "TitleChangedEvent" }
         | { __typename?: "TypeChangedEvent" }
+        | { __typename?: "View" }
         | null;
 };
 
@@ -5314,8 +5380,6 @@ export type GetFullComponentTemplateQuery = {
           }
         | { __typename?: "ComponentVersion" }
         | { __typename?: "ComponentVersionTemplate" }
-        | { __typename?: "DueDateChangedEvent" }
-        | { __typename?: "EstimatedTimeChangedEvent" }
         | { __typename?: "FillStyle" }
         | { __typename?: "GlobalPermission" }
         | { __typename?: "GropiusUser" }
@@ -5331,7 +5395,6 @@ export type GetFullComponentTemplateQuery = {
         | { __typename?: "IncomingRelationTypeChangedEvent" }
         | { __typename?: "Interface" }
         | { __typename?: "InterfaceDefinition" }
-        | { __typename?: "InterfaceDefinitionTemplate" }
         | { __typename?: "InterfacePart" }
         | { __typename?: "InterfacePartTemplate" }
         | { __typename?: "InterfaceSpecification" }
@@ -5339,7 +5402,6 @@ export type GetFullComponentTemplateQuery = {
         | { __typename?: "InterfaceSpecificationTemplate" }
         | { __typename?: "InterfaceSpecificationVersion" }
         | { __typename?: "InterfaceSpecificationVersionTemplate" }
-        | { __typename?: "InterfaceTemplate" }
         | { __typename?: "IntraComponentDependencyParticipant" }
         | { __typename?: "IntraComponentDependencySpecification" }
         | { __typename?: "Issue" }
@@ -5351,7 +5413,6 @@ export type GetFullComponentTemplateQuery = {
         | { __typename?: "IssueTemplate" }
         | { __typename?: "IssueType" }
         | { __typename?: "Label" }
-        | { __typename?: "MetaAggregatedIssueRelation" }
         | { __typename?: "OutgoingRelationTypeChangedEvent" }
         | { __typename?: "PriorityChangedEvent" }
         | { __typename?: "Project" }
@@ -5359,6 +5420,8 @@ export type GetFullComponentTemplateQuery = {
         | { __typename?: "RelatedByIssueEvent" }
         | { __typename?: "Relation" }
         | { __typename?: "RelationCondition" }
+        | { __typename?: "RelationLayout" }
+        | { __typename?: "RelationPartnerLayout" }
         | { __typename?: "RelationTemplate" }
         | { __typename?: "RemovedAffectedEntityEvent" }
         | { __typename?: "RemovedArtefactEvent" }
@@ -5369,14 +5432,13 @@ export type GetFullComponentTemplateQuery = {
         | { __typename?: "RemovedLabelEvent" }
         | { __typename?: "RemovedOutgoingRelationEvent" }
         | { __typename?: "RemovedTemplatedFieldEvent" }
-        | { __typename?: "SpentTimeChangedEvent" }
-        | { __typename?: "StartDateChangedEvent" }
         | { __typename?: "StateChangedEvent" }
         | { __typename?: "StrokeStyle" }
         | { __typename?: "TemplateChangedEvent" }
         | { __typename?: "TemplatedFieldChangedEvent" }
         | { __typename?: "TitleChangedEvent" }
         | { __typename?: "TypeChangedEvent" }
+        | { __typename?: "View" }
         | null;
 };
 
@@ -5405,8 +5467,6 @@ export type GetFullInterfaceSpecificationTemplateQuery = {
         | { __typename?: "ComponentTemplate" }
         | { __typename?: "ComponentVersion" }
         | { __typename?: "ComponentVersionTemplate" }
-        | { __typename?: "DueDateChangedEvent" }
-        | { __typename?: "EstimatedTimeChangedEvent" }
         | { __typename?: "FillStyle" }
         | { __typename?: "GlobalPermission" }
         | { __typename?: "GropiusUser" }
@@ -5422,7 +5482,6 @@ export type GetFullInterfaceSpecificationTemplateQuery = {
         | { __typename?: "IncomingRelationTypeChangedEvent" }
         | { __typename?: "Interface" }
         | { __typename?: "InterfaceDefinition" }
-        | { __typename?: "InterfaceDefinitionTemplate" }
         | { __typename?: "InterfacePart" }
         | { __typename?: "InterfacePartTemplate" }
         | { __typename?: "InterfaceSpecification" }
@@ -5453,20 +5512,6 @@ export type GetFullInterfaceSpecificationTemplateQuery = {
                   description: string;
                   templateFieldSpecifications: Array<{ __typename?: "JSONField"; name: string; value?: any | null }>;
               };
-              interfaceDefinitionTemplate: {
-                  __typename?: "InterfaceDefinitionTemplate";
-                  id: string;
-                  name: string;
-                  description: string;
-                  templateFieldSpecifications: Array<{ __typename?: "JSONField"; name: string; value?: any | null }>;
-              };
-              interfaceTemplate: {
-                  __typename?: "InterfaceTemplate";
-                  id: string;
-                  name: string;
-                  description: string;
-                  templateFieldSpecifications: Array<{ __typename?: "JSONField"; name: string; value?: any | null }>;
-              };
               interfacePartTemplate: {
                   __typename?: "InterfacePartTemplate";
                   id: string;
@@ -5485,7 +5530,6 @@ export type GetFullInterfaceSpecificationTemplateQuery = {
           }
         | { __typename?: "InterfaceSpecificationVersion" }
         | { __typename?: "InterfaceSpecificationVersionTemplate" }
-        | { __typename?: "InterfaceTemplate" }
         | { __typename?: "IntraComponentDependencyParticipant" }
         | { __typename?: "IntraComponentDependencySpecification" }
         | { __typename?: "Issue" }
@@ -5497,7 +5541,6 @@ export type GetFullInterfaceSpecificationTemplateQuery = {
         | { __typename?: "IssueTemplate" }
         | { __typename?: "IssueType" }
         | { __typename?: "Label" }
-        | { __typename?: "MetaAggregatedIssueRelation" }
         | { __typename?: "OutgoingRelationTypeChangedEvent" }
         | { __typename?: "PriorityChangedEvent" }
         | { __typename?: "Project" }
@@ -5505,6 +5548,8 @@ export type GetFullInterfaceSpecificationTemplateQuery = {
         | { __typename?: "RelatedByIssueEvent" }
         | { __typename?: "Relation" }
         | { __typename?: "RelationCondition" }
+        | { __typename?: "RelationLayout" }
+        | { __typename?: "RelationPartnerLayout" }
         | { __typename?: "RelationTemplate" }
         | { __typename?: "RemovedAffectedEntityEvent" }
         | { __typename?: "RemovedArtefactEvent" }
@@ -5515,14 +5560,13 @@ export type GetFullInterfaceSpecificationTemplateQuery = {
         | { __typename?: "RemovedLabelEvent" }
         | { __typename?: "RemovedOutgoingRelationEvent" }
         | { __typename?: "RemovedTemplatedFieldEvent" }
-        | { __typename?: "SpentTimeChangedEvent" }
-        | { __typename?: "StartDateChangedEvent" }
         | { __typename?: "StateChangedEvent" }
         | { __typename?: "StrokeStyle" }
         | { __typename?: "TemplateChangedEvent" }
         | { __typename?: "TemplatedFieldChangedEvent" }
         | { __typename?: "TitleChangedEvent" }
         | { __typename?: "TypeChangedEvent" }
+        | { __typename?: "View" }
         | null;
 };
 
@@ -5561,8 +5605,6 @@ export type GetFullArtefactTemplateQuery = {
         | { __typename?: "ComponentTemplate" }
         | { __typename?: "ComponentVersion" }
         | { __typename?: "ComponentVersionTemplate" }
-        | { __typename?: "DueDateChangedEvent" }
-        | { __typename?: "EstimatedTimeChangedEvent" }
         | { __typename?: "FillStyle" }
         | { __typename?: "GlobalPermission" }
         | { __typename?: "GropiusUser" }
@@ -5578,7 +5620,6 @@ export type GetFullArtefactTemplateQuery = {
         | { __typename?: "IncomingRelationTypeChangedEvent" }
         | { __typename?: "Interface" }
         | { __typename?: "InterfaceDefinition" }
-        | { __typename?: "InterfaceDefinitionTemplate" }
         | { __typename?: "InterfacePart" }
         | { __typename?: "InterfacePartTemplate" }
         | { __typename?: "InterfaceSpecification" }
@@ -5586,7 +5627,6 @@ export type GetFullArtefactTemplateQuery = {
         | { __typename?: "InterfaceSpecificationTemplate" }
         | { __typename?: "InterfaceSpecificationVersion" }
         | { __typename?: "InterfaceSpecificationVersionTemplate" }
-        | { __typename?: "InterfaceTemplate" }
         | { __typename?: "IntraComponentDependencyParticipant" }
         | { __typename?: "IntraComponentDependencySpecification" }
         | { __typename?: "Issue" }
@@ -5598,7 +5638,6 @@ export type GetFullArtefactTemplateQuery = {
         | { __typename?: "IssueTemplate" }
         | { __typename?: "IssueType" }
         | { __typename?: "Label" }
-        | { __typename?: "MetaAggregatedIssueRelation" }
         | { __typename?: "OutgoingRelationTypeChangedEvent" }
         | { __typename?: "PriorityChangedEvent" }
         | { __typename?: "Project" }
@@ -5606,6 +5645,8 @@ export type GetFullArtefactTemplateQuery = {
         | { __typename?: "RelatedByIssueEvent" }
         | { __typename?: "Relation" }
         | { __typename?: "RelationCondition" }
+        | { __typename?: "RelationLayout" }
+        | { __typename?: "RelationPartnerLayout" }
         | { __typename?: "RelationTemplate" }
         | { __typename?: "RemovedAffectedEntityEvent" }
         | { __typename?: "RemovedArtefactEvent" }
@@ -5616,14 +5657,13 @@ export type GetFullArtefactTemplateQuery = {
         | { __typename?: "RemovedLabelEvent" }
         | { __typename?: "RemovedOutgoingRelationEvent" }
         | { __typename?: "RemovedTemplatedFieldEvent" }
-        | { __typename?: "SpentTimeChangedEvent" }
-        | { __typename?: "StartDateChangedEvent" }
         | { __typename?: "StateChangedEvent" }
         | { __typename?: "StrokeStyle" }
         | { __typename?: "TemplateChangedEvent" }
         | { __typename?: "TemplatedFieldChangedEvent" }
         | { __typename?: "TitleChangedEvent" }
         | { __typename?: "TypeChangedEvent" }
+        | { __typename?: "View" }
         | null;
 };
 
@@ -5652,8 +5692,6 @@ export type GetFullRelationTemplateQuery = {
         | { __typename?: "ComponentTemplate" }
         | { __typename?: "ComponentVersion" }
         | { __typename?: "ComponentVersionTemplate" }
-        | { __typename?: "DueDateChangedEvent" }
-        | { __typename?: "EstimatedTimeChangedEvent" }
         | { __typename?: "FillStyle" }
         | { __typename?: "GlobalPermission" }
         | { __typename?: "GropiusUser" }
@@ -5669,7 +5707,6 @@ export type GetFullRelationTemplateQuery = {
         | { __typename?: "IncomingRelationTypeChangedEvent" }
         | { __typename?: "Interface" }
         | { __typename?: "InterfaceDefinition" }
-        | { __typename?: "InterfaceDefinitionTemplate" }
         | { __typename?: "InterfacePart" }
         | { __typename?: "InterfacePartTemplate" }
         | { __typename?: "InterfaceSpecification" }
@@ -5677,7 +5714,6 @@ export type GetFullRelationTemplateQuery = {
         | { __typename?: "InterfaceSpecificationTemplate" }
         | { __typename?: "InterfaceSpecificationVersion" }
         | { __typename?: "InterfaceSpecificationVersionTemplate" }
-        | { __typename?: "InterfaceTemplate" }
         | { __typename?: "IntraComponentDependencyParticipant" }
         | { __typename?: "IntraComponentDependencySpecification" }
         | { __typename?: "Issue" }
@@ -5689,7 +5725,6 @@ export type GetFullRelationTemplateQuery = {
         | { __typename?: "IssueTemplate" }
         | { __typename?: "IssueType" }
         | { __typename?: "Label" }
-        | { __typename?: "MetaAggregatedIssueRelation" }
         | { __typename?: "OutgoingRelationTypeChangedEvent" }
         | { __typename?: "PriorityChangedEvent" }
         | { __typename?: "Project" }
@@ -5697,6 +5732,8 @@ export type GetFullRelationTemplateQuery = {
         | { __typename?: "RelatedByIssueEvent" }
         | { __typename?: "Relation" }
         | { __typename?: "RelationCondition" }
+        | { __typename?: "RelationLayout" }
+        | { __typename?: "RelationPartnerLayout" }
         | {
               __typename?: "RelationTemplate";
               markerType: MarkerType;
@@ -5760,14 +5797,13 @@ export type GetFullRelationTemplateQuery = {
         | { __typename?: "RemovedLabelEvent" }
         | { __typename?: "RemovedOutgoingRelationEvent" }
         | { __typename?: "RemovedTemplatedFieldEvent" }
-        | { __typename?: "SpentTimeChangedEvent" }
-        | { __typename?: "StartDateChangedEvent" }
         | { __typename?: "StateChangedEvent" }
         | { __typename?: "StrokeStyle" }
         | { __typename?: "TemplateChangedEvent" }
         | { __typename?: "TemplatedFieldChangedEvent" }
         | { __typename?: "TitleChangedEvent" }
         | { __typename?: "TypeChangedEvent" }
+        | { __typename?: "View" }
         | null;
 };
 
@@ -5832,8 +5868,6 @@ export type GetFullTemplateQuery = {
           }
         | { __typename?: "ComponentVersion" }
         | { __typename?: "ComponentVersionTemplate" }
-        | { __typename?: "DueDateChangedEvent" }
-        | { __typename?: "EstimatedTimeChangedEvent" }
         | { __typename?: "FillStyle" }
         | { __typename?: "GlobalPermission" }
         | { __typename?: "GropiusUser" }
@@ -5849,7 +5883,6 @@ export type GetFullTemplateQuery = {
         | { __typename?: "IncomingRelationTypeChangedEvent" }
         | { __typename?: "Interface" }
         | { __typename?: "InterfaceDefinition" }
-        | { __typename?: "InterfaceDefinitionTemplate" }
         | { __typename?: "InterfacePart" }
         | { __typename?: "InterfacePartTemplate" }
         | { __typename?: "InterfaceSpecification" }
@@ -5880,20 +5913,6 @@ export type GetFullTemplateQuery = {
                   description: string;
                   templateFieldSpecifications: Array<{ __typename?: "JSONField"; name: string; value?: any | null }>;
               };
-              interfaceDefinitionTemplate: {
-                  __typename?: "InterfaceDefinitionTemplate";
-                  id: string;
-                  name: string;
-                  description: string;
-                  templateFieldSpecifications: Array<{ __typename?: "JSONField"; name: string; value?: any | null }>;
-              };
-              interfaceTemplate: {
-                  __typename?: "InterfaceTemplate";
-                  id: string;
-                  name: string;
-                  description: string;
-                  templateFieldSpecifications: Array<{ __typename?: "JSONField"; name: string; value?: any | null }>;
-              };
               interfacePartTemplate: {
                   __typename?: "InterfacePartTemplate";
                   id: string;
@@ -5912,7 +5931,6 @@ export type GetFullTemplateQuery = {
           }
         | { __typename?: "InterfaceSpecificationVersion" }
         | { __typename?: "InterfaceSpecificationVersionTemplate" }
-        | { __typename?: "InterfaceTemplate" }
         | { __typename?: "IntraComponentDependencyParticipant" }
         | { __typename?: "IntraComponentDependencySpecification" }
         | { __typename?: "Issue" }
@@ -5978,7 +5996,6 @@ export type GetFullTemplateQuery = {
           }
         | { __typename?: "IssueType" }
         | { __typename?: "Label" }
-        | { __typename?: "MetaAggregatedIssueRelation" }
         | { __typename?: "OutgoingRelationTypeChangedEvent" }
         | { __typename?: "PriorityChangedEvent" }
         | { __typename?: "Project" }
@@ -5986,6 +6003,8 @@ export type GetFullTemplateQuery = {
         | { __typename?: "RelatedByIssueEvent" }
         | { __typename?: "Relation" }
         | { __typename?: "RelationCondition" }
+        | { __typename?: "RelationLayout" }
+        | { __typename?: "RelationPartnerLayout" }
         | {
               __typename?: "RelationTemplate";
               markerType: MarkerType;
@@ -6049,14 +6068,13 @@ export type GetFullTemplateQuery = {
         | { __typename?: "RemovedLabelEvent" }
         | { __typename?: "RemovedOutgoingRelationEvent" }
         | { __typename?: "RemovedTemplatedFieldEvent" }
-        | { __typename?: "SpentTimeChangedEvent" }
-        | { __typename?: "StartDateChangedEvent" }
         | { __typename?: "StateChangedEvent" }
         | { __typename?: "StrokeStyle" }
         | { __typename?: "TemplateChangedEvent" }
         | { __typename?: "TemplatedFieldChangedEvent" }
         | { __typename?: "TitleChangedEvent" }
         | { __typename?: "TypeChangedEvent" }
+        | { __typename?: "View" }
         | null;
 };
 
@@ -6193,20 +6211,6 @@ export type CreateInterfaceSpecificationTemplateMutation = {
             };
             interfaceSpecificationVersionTemplate: {
                 __typename?: "InterfaceSpecificationVersionTemplate";
-                id: string;
-                name: string;
-                description: string;
-                templateFieldSpecifications: Array<{ __typename?: "JSONField"; name: string; value?: any | null }>;
-            };
-            interfaceDefinitionTemplate: {
-                __typename?: "InterfaceDefinitionTemplate";
-                id: string;
-                name: string;
-                description: string;
-                templateFieldSpecifications: Array<{ __typename?: "JSONField"; name: string; value?: any | null }>;
-            };
-            interfaceTemplate: {
-                __typename?: "InterfaceTemplate";
                 id: string;
                 name: string;
                 description: string;
@@ -6430,12 +6434,6 @@ export const FullInterfaceSpecificationTemplateInfoFragmentDoc = gql`
             }
         }
         interfaceSpecificationVersionTemplate {
-            ...BaseTemplateInfo
-        }
-        interfaceDefinitionTemplate {
-            ...BaseTemplateInfo
-        }
-        interfaceTemplate {
             ...BaseTemplateInfo
         }
         interfacePartTemplate {

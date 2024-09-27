@@ -103,12 +103,6 @@ fragment FullInterfaceSpecificationTemplateInfo on InterfaceSpecificationTemplat
     interfaceSpecificationVersionTemplate {
         ...BaseTemplateInfo
     }
-    interfaceDefinitionTemplate {
-        ...BaseTemplateInfo
-    }
-    interfaceTemplate {
-        ...BaseTemplateInfo
-    }
     interfacePartTemplate {
         ...BaseTemplateInfo
     }

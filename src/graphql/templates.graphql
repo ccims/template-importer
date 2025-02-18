@@ -81,6 +81,13 @@ fragment FullComponentTemplateInfo on ComponentTemplate {
     componentVersionTemplate {
         ...BaseTemplateInfo
     }
+    intraComponentDependencySpecificationTypes {
+        nodes {
+            id
+            name
+            description
+        }
+    }
 }
 
 fragment FullInterfaceSpecificationTemplateInfo on InterfaceSpecificationTemplate {

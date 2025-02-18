@@ -10,12 +10,21 @@ export class ComponentTemplateHandler extends RelationPartnerTemplateHandler<
         const defaultValue = await this.getDefault(definition);
         const context = { definition, defaultValue };
 
+        const icdsTypes =
+            definition.icdsTypes ??
+            defaultValue?.intraComponentDependencySpecificationTypes?.nodes.map((node) => ({
+                name: node.name,
+                description: node.description
+            })) ??
+            [];
+
         const res = await this.engine.client.createComponentTemplate({
             input: {
                 ...(await this.getRelationPartnerFields(context)),
                 componentVersionTemplate:
                     definition.componentVersionTemplate ??
-                    this.extractSubTemplateInput(defaultValue?.componentVersionTemplate)
+                    this.extractSubTemplateInput(defaultValue?.componentVersionTemplate),
+                intraComponentDependencySpecificationTypes: icdsTypes
             }
         });
         return res.createComponentTemplate!.componentTemplate!;

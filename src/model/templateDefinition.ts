@@ -10,4 +10,5 @@ export interface TemplateDefinition {
     templatedFieldSpecifications?: TemplatedFieldSpecification[];
     extends?: TemplateReference[];
     default?: TemplateReference;
+    abstract?: boolean;
 }

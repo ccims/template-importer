@@ -1,4 +1,4 @@
-import { BaseTemplateInfoFragment, FillStyleInput, StrokeStyleInput, SubTemplateInput } from "../graphql/generated";
+import { BaseTemplateInfoFragment, TemplateInfoFragment, FillStyleInput, StrokeStyleInput, SubTemplateInput } from "../graphql/generated";
 import { TemplateDefinition } from "../model/templateDefinition";
 import { TemplateReference } from "../model/templateReference";
 import { TemplatedFieldSpecification } from "../model/templatedFieldSpecification";
@@ -8,7 +8,7 @@ export abstract class TemplateHandler<
     D extends TemplateDefinition,
     T extends {
         extends: { nodes: { id: string }[] };
-    } & Pick<BaseTemplateInfoFragment, "name" | "description" | "templateFieldSpecifications">
+    } & Pick<TemplateInfoFragment, "name" | "description" | "templateFieldSpecifications" | "isAbstract">
 > {
     constructor(readonly engine: TemplateEngine) {}
 
@@ -53,7 +53,8 @@ export abstract class TemplateHandler<
             description: definition.description ?? defaultValue?.description ?? "",
             extends: await this.getExtends(context),
             templateFieldSpecifications:
-                definition.templatedFieldSpecifications ?? defaultTemplatedFieldSpecifications ?? []
+                definition.templatedFieldSpecifications ?? defaultTemplatedFieldSpecifications ?? [],
+            isAbstract: definition.abstract ?? defaultValue?.isAbstract ?? false
         };
     }
 
@@ -107,6 +108,7 @@ export interface TemplateInputCommonFields {
     description: string;
     extends: string[];
     templateFieldSpecifications: TemplatedFieldSpecification[];
+    isAbstract: boolean
 }
 
 interface FillStyle {

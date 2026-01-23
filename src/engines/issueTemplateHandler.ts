@@ -19,7 +19,8 @@ export class IssueTemplateHandler extends TemplateHandler<IssueTemplateDefinitio
             defaultValue?.issuePriorities?.nodes.map((node) => ({
                 name: node.name,
                 description: node.description,
-                value: node.value
+                value: node.value,
+                iconPath: node.iconPath
             })) ??
             [];
         const issueStates =

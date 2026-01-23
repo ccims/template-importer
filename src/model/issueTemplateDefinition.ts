@@ -25,6 +25,7 @@ export interface IssueStateDefinition extends BaseTypeDefinition {
 
 export interface IssuePriorityDefinition extends BaseTypeDefinition {
     value: number;
+    iconPath: string;
 }
 
 export interface RelationTypeDefinition extends BaseTypeDefinition {

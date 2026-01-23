@@ -8,8 +8,13 @@ fragment BaseTemplateInfo on BaseTemplate {
     }
 }
 
-fragment RelationPartnerTemplateInfo on RelationPartnerTemplate {
+fragment TemplateInfo on Template {
     ...BaseTemplateInfo
+    isAbstract
+}
+
+fragment RelationPartnerTemplateInfo on RelationPartnerTemplate {
+    ...TemplateInfo
     shapeRadius
     shapeType
     fill {
@@ -24,7 +29,7 @@ fragment RelationPartnerTemplateInfo on RelationPartnerTemplate {
 }
 
 fragment FullIssueTemplateInfo on IssueTemplate {
-    ...BaseTemplateInfo
+    ...TemplateInfo
     extends {
         nodes {
             id
@@ -59,6 +64,7 @@ fragment FullIssueTemplateInfo on IssueTemplate {
             name
             description
             value
+            iconPath
         }
     }
     relationTypes {
@@ -116,7 +122,7 @@ fragment FullInterfaceSpecificationTemplateInfo on InterfaceSpecificationTemplat
 }
 
 fragment FullArtefactTemplateInfo on ArtefactTemplate {
-    ...BaseTemplateInfo
+    ...TemplateInfo
     extends {
         nodes {
             id
@@ -125,7 +131,7 @@ fragment FullArtefactTemplateInfo on ArtefactTemplate {
 }
 
 fragment FullRelationTemplateInfo on RelationTemplate {
-    ...BaseTemplateInfo
+    ...TemplateInfo
     extends {
         nodes {
             id
